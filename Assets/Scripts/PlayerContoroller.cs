@@ -44,6 +44,7 @@ public class PlayerContoroller : MonoBehaviour
         //    pos.x += 0.02f;
         //}
         
+        //˜A‘±‚Åƒ{ƒ^ƒ“‚ğ‰Ÿ‚¹‚È‚¢‚æ‚¤‚É‚·‚é
         if (key)
         {
             //¶
