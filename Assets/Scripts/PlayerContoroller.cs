@@ -8,27 +8,28 @@ public class PlayerContoroller : MonoBehaviour
     public int hokou = 1;//ï˚å¸ ñkÇPÅ@ìåÇQÅ@ìÏÇRÅ@êºÇS
     public float rtateSpeed = 3.0f;//âÒì]ë¨ìx
     public float jumpForce = 4f;
+    public float speed;
     Rigidbody rb;
     public GameObject cam; //ÉJÉÅÉâ
     public GameObject player;//ÉvÉåÉCÉÑÅ[
-    bool key = true;
+    private bool key = true;
+    private bool jump = true;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         player = GameObject.Find("Player");
         cam = GameObject.Find("Main Camera");
+        speed = 0.05f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Transform myTransform = this.transform;
-        
-        Vector3 pos = myTransform.position;
-        Vector3 eul = myTransform.eulerAngles;
+        //Vector3 pos =this.transform.position;
+        Vector3 eul = this.transform.eulerAngles;
 
-        pos.z += 0.02f;
+        //pos.z += 0.02f;
         //if (Input.GetKey(KeyCode.W) || hokou == 1)
         //{
         //    cam.transform.position = new Vector3(pos.x,pos.y+1,pos.z-2);
@@ -72,6 +73,43 @@ public class PlayerContoroller : MonoBehaviour
                 //pos.z -= 0.02f;
                
             }
+            if(hokou == 5 ) 
+            {
+                hokou = 1;
+            }else if (hokou == 0)
+            {
+                hokou = 4;
+            }
+
+            if (hokou == 1)
+            {
+                //pos.z += speed;
+                this.transform.position += new Vector3(0, 0, speed);
+
+            }
+            else if (hokou == 2)
+            {
+                //pos.x += speed;
+                this.transform.position += new Vector3(speed, 0, 0);
+
+            }
+            else if (hokou == 3)
+            {
+                //pos.z -= speed;]
+                this.transform.position -= new Vector3(0, 0, speed);
+
+            }
+            else if (hokou == 4)
+            {
+                //pos.x -= speed;
+                this.transform.position -= new Vector3(speed, 0, 0);
+            }
+
+            if (Input.GetKey(KeyCode.Space)&&jump)
+            {
+                rb.velocity = Vector3.up * jumpForce;
+                jump = false;
+            }
 
             if (!key)
             {
@@ -81,15 +119,16 @@ public class PlayerContoroller : MonoBehaviour
            
         }
 
-        if (Input.GetKey(KeyCode.Space))
-        {
-            rb.velocity = Vector3.up * jumpForce;
-        }
-
-        myTransform.position = pos;
     }
 
-   
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("floor"))
+        {
+            jump = true;
+        }
+    }
+
     IEnumerator KeyStop()
     {
         yield return new WaitForSeconds(0.3f);
