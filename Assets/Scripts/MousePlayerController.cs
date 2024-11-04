@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class MousePlayerController : MonoBehaviour
 {
-    public float speed = 30.0f;
-    public float moveSpeed = 3f;
+    public float moveSpeed = 5f;
     public float inputH;
     public float inputV;
 
@@ -40,14 +39,29 @@ public class MousePlayerController : MonoBehaviour
         Vector3 cameraFoward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         //方向キーの入力値とカメラの向きから、移動方向を決定
-        Vector3 moveFoward = cameraFoward * inputV + Camera.main.transform.right * inputH;
+        Vector3 moveFoward = cameraFoward+ Camera.main.transform.right*inputV;
+
+        //スピードを上げる
+        if (Input.GetMouseButton(1))
+        {
+            moveSpeed = 10f;
+        }
+        else
+        {
+            moveSpeed = 5f;
+        }
 
         //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
         rb.velocity = moveFoward * moveSpeed + new Vector3(0, rb.velocity.y, 0);
 
         //キャラクターの向きを進行方向に
+        //if(moveFoward != Vector3.zero)
+        //{
         transform.rotation = Quaternion.LookRotation(moveFoward);
-        
+        //}
+
+
+
 
     }
 }

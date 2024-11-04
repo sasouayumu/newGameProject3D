@@ -17,15 +17,18 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //transform.position += targetObj.transform.position - targetPos;
-        //targetPos = targetObj.transform.position;
-        
-        
-
-        float mouseInputX = Input.GetAxis("Mouse X");
+        transform.position += targetObj.transform.position - targetPos;
+        targetPos = targetObj.transform.position;
 
 
-        transform.RotateAround(targetPos, Vector3.up, mouseInputX * Time.deltaTime * 200f);
+        //マウスの右クリックを押している間
+        if (Input.GetMouseButton(0))
+        {
+            float mouseInputX = Input.GetAxis("Mouse X");
+
+
+            transform.RotateAround(targetPos, Vector3.up, mouseInputX *50f);
+        }
         
 
         
