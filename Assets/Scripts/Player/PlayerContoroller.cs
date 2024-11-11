@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerContoroller : MonoBehaviour
+public class PlayerContoroller : MoveController
 {
     public int hokou = 1;//•ûŒü –k‚P@“Œ‚Q@“ì‚R@¼‚S
     public float rtateSpeed = 3.0f;//‰ñ“]‘¬“x
@@ -17,10 +17,11 @@ public class PlayerContoroller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        
         player = GameObject.Find("Player");
         cam = GameObject.Find("Main Camera");
         speed = 0.05f;
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
