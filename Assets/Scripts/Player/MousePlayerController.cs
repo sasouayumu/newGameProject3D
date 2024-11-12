@@ -6,19 +6,25 @@ using UnityEngine;
 
 public class MousePlayerController : MoveController
 {
+    private int moveInversion = 1;
+
     private float moveSpeed = 5f;
     private float inputH;
     private float inputV;
     private float jumpForce = 5f;
+
     private bool jump = true;
     private bool dush = true;
     private bool coroutine = true;
     private bool coroutine2 = true;
+    private bool move = true;
+    
     Rigidbody rbPlayer;
     // Start is called before the first frame update
     void Start()
     {
         rbPlayer = GetComponent<Rigidbody>();
+        
     }
 
     // Update is called once per frame
@@ -42,10 +48,22 @@ public class MousePlayerController : MoveController
         //カメラの方向からX-Z平面の単位ベクトルを取得
         Vector3 cameraFoward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
+        if (Input.GetMouseButton(2) && move)
+        {
+            move = false;
+            moveInversion *= -1;
+        }
+        else if (!Input.GetMouseButton(2) && !move)
+        {
+            move = true;
+
+        }
+
+
+
+
         //方向キーの入力値とカメラの向きから、移動方向を決定
-        Vector3 moveFoward = cameraFoward+ Camera.main.transform.right*inputV;
-
-
+        Vector3 moveFoward = cameraFoward + Camera.main.transform.right * inputV;
 
         //スピードを上げる
         if (Input.GetMouseButton(1) && dush)
@@ -55,21 +73,22 @@ public class MousePlayerController : MoveController
             GetComponent<Renderer>().material.color = Color.blue;
             if (coroutine)
             {
-                Debug.Log("hasiru"+dush);
+                
                 coroutine = false;
                 StartCoroutine("DushCotroller");
             }
-            
+
         }
         else
         {
             GetComponent<Renderer>().material.color = Color.red;
             if (!coroutine&&coroutine2)
             {
+                dush = false;
                 coroutine = true;
                 coroutine2 = false;
-                Debug.Log("yame" + dush);
-                StopCoroutine("DushController");
+                
+                StopCoroutine("DushCotroller");
                 StartCoroutine("DushStop");
             }
             
@@ -81,12 +100,13 @@ public class MousePlayerController : MoveController
 
         if (Input.GetKey(KeyCode.Space) && jump)
         {
+            //yPos = rbPlayer.velocity.y;
             rbPlayer.velocity = Vector3.up * jumpForce;
             jump = false;
         }
 
         //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-        rbPlayer.velocity = moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
+        rbPlayer.velocity = moveInversion*moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
 
         //キャラクターの向きを進行方向に
         //if(moveFoward != Vector3.zero)
@@ -104,22 +124,39 @@ public class MousePlayerController : MoveController
         {
             jump = true;
         }
+
+        //if (collision.gameObject.CompareTag("Stand"))
+        //{
+        //    Debug.Log("ジャンプかいし"+yPos);
+        //    Debug.Log("着地"+rbPlayer.velocity.y);
+
+        //    if(yPos > rbPlayer.velocity.y&& !jump)
+        //    {
+        //        enJump = true;
+        //        EnemyJump();
+        //    }
+        //}
     }
+
+    //public bool EnemyJump()
+    //{
+    //    return enJump;
+    //}
 
     private IEnumerator DushCotroller()
     {
         
         yield return new WaitForSeconds(3.0f);
         dush = false;
-        Debug.Log("tukareta"+dush);
+        
         StartCoroutine("DushStop");
     }
 
     private IEnumerator DushStop()
     {
-        Debug.Log("kyukei" + dush);
+        
         yield return new WaitForSeconds(3.0f);
-        Debug.Log("hasireruyo" + dush);
+        
         coroutine2 = true;
         dush = true;
     }

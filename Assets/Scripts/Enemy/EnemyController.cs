@@ -11,7 +11,8 @@ public class EnemyController : MoveController
     float jump = 5f;
     Rigidbody rbEnemy;
     private bool floor = false;
-
+    MousePlayerController mpc;
+    private bool canJump;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +20,8 @@ public class EnemyController : MoveController
         playerTr = GameObject.FindGameObjectWithTag("Player").transform;
         enemyTr = GameObject.FindGameObjectWithTag("Enemy").transform;
         rbEnemy = GetComponent<Rigidbody>();
+        GameObject player = GameObject.Find("Player");
+        mpc = player.GetComponent<MousePlayerController>();
         
     }
 
@@ -30,12 +33,13 @@ public class EnemyController : MoveController
             Vector3.MoveTowards(transform.position,
             new Vector3(playerTr.position.x,playerTr.position.y,playerTr.position.z),
             speed*Time.deltaTime);
-
+       
         //Playerが高い場所に行き、FloorがTrueならジャンプする
-        if(playerTr.position.y > enemyTr.position.y&& floor )
+        if(Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)
         {
             rbEnemy.velocity = Vector3.up * jump;
             floor = false;
+           
         }
     }
 
@@ -45,6 +49,7 @@ public class EnemyController : MoveController
         if (collision.gameObject.CompareTag("Stand"))
         {
             floor = true;
+            
         }
     }
 }
