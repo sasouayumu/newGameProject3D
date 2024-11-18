@@ -7,6 +7,9 @@ TagManager:
   - floor
   - Enemy
   - Stand
+  - Key
+  - Goal
+  - Wall
   layers:
   - Default
   - TransparentFX

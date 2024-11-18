@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameClear : MonoBehaviour
 {
-    private bool key = false;
+    public bool key = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,9 +21,16 @@ public class GameClear : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         
+
+        
         if (collision.gameObject.CompareTag("Player") && key)
         {
             SceneManager.LoadScene(2);
+        }
+
+        if (collision.gameObject.CompareTag("Player") && this.gameObject.CompareTag("Key"))
+        {
+            Destroy(this.gameObject);
         }
     }
 }

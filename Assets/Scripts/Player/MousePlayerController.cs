@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -9,17 +10,21 @@ public class MousePlayerController : MoveController
     private int moveInversion = 1;
 
     private float moveSpeed = 5f;
-    private float inputH;
+    //private float inputH;
     private float inputV;
     private float jumpForce = 5f;
-
+    [SerializeField] private float wallKickHS = 3f;
+    [SerializeField] private float wallKickVS = 3f;
+    [SerializeField] private float maxStickWallKickFS = 1f;
     private bool jump = true;
     private bool dush = true;
     private bool coroutine = true;
     private bool coroutine2 = true;
     private bool move = true;
-    
+    private Vector3 velocity;
     Rigidbody rbPlayer;
+
+    public Vector3 NomalOfStickingWall { get; private set; } = Vector3.zero;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +44,7 @@ public class MousePlayerController : MoveController
         //    transform.rotatearound(transform.position, vector3.up, m);
         //}
 
-        inputH = Input.GetAxisRaw("Horizontal");
+        //inputH = Input.GetAxisRaw("Horizontal");
         inputV = Input.GetAxisRaw("Vertical");
     }
 
@@ -109,10 +114,10 @@ public class MousePlayerController : MoveController
         rbPlayer.velocity = moveInversion*moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
 
         //キャラクターの向きを進行方向に
-        //if(moveFoward != Vector3.zero)
-        //{
-        transform.rotation = Quaternion.LookRotation(moveFoward);
-        //}
+        if (moveFoward != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(moveFoward);
+        }
 
     }
 
@@ -160,5 +165,25 @@ public class MousePlayerController : MoveController
         coroutine2 = true;
         dush = true;
     }
+
+    //public void WallKick()
+    //{
+    //    if (this.velocity.y >= -0.05f) return;
+
+
+    //    this.transform.forward = this.NomalOfStickingWall;
+
+    //    this.velocity = new Vector3(this.NomalOfStickingWall.x*this.wallKickHS+this.velocity.x,
+    //        this.wallKickVS,this.NomalOfStickingWall.z*this.wallKickHS+this.velocity.z);
+    //}
+
+    //public void StickWall(Vector3 normalOfStickingWall)
+    //{
+    //    if (this.jump) return;
+
+    //    this.velocity = new Vector3(0f, this.velocity.y, 0f);
+    //    this.transform.rotation = Quaternion.LookRotation(-1 * normalOfStickingWall, Vector3.up);
+    //    this.NomalOfStickingWall = normalOfStickingWall;
+    //}
     
 }
