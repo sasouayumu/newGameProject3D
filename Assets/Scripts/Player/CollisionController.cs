@@ -53,13 +53,13 @@ public class CollisionController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Key"))
         {
-            
+
             key = true;
         }
 
-        if (collision.gameObject.CompareTag("Goal")&&key)
+        if (collision.gameObject.CompareTag("Goal") && key)
         {
-            
+
             SceneManager.LoadScene(2);
         }
 
@@ -76,7 +76,7 @@ public class CollisionController : MonoBehaviour
             colPos = this.transform.position;
         }
 
-        
+
     }
 
     private void OnCollisionExit(Collision collision)
@@ -97,5 +97,5 @@ public class CollisionController : MonoBehaviour
         rigP.drag = 0;
     }
 
-   
+
 }
