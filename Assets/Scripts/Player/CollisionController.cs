@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,12 +12,16 @@ public class CollisionController : MonoBehaviour
     public bool wallTouch { get; private set; }
     [SerializeField] private MousePlayerController mousePlayer;
     Rigidbody rigP;
+    GameObject p;
+    Vector3 pPos;
 
     private Vector3 colPos;
     // Start is called before the first frame update
     void Start()
     {
         rigP = GetComponent<Rigidbody>();
+        p = GameObject.Find("Player");
+        wallTouch = false;
         
     }
 
@@ -25,10 +30,13 @@ public class CollisionController : MonoBehaviour
     {
         input = Input.GetAxisRaw("Horizontal");
         rigP.velocity = new Vector3(input * 3, rigP.velocity.y, 0);
-        if (Input.GetKeyDown("w"))
+        //Debug.Log(wallTouch);
+        if (Input.GetKeyDown("w")&&wallTouch)
         {
-            isStop = false;
+            //isStop = false;
+            
             rigP.velocity = new Vector3(rigP.velocity.x, 7, 0);
+            
         }
 
         //if (isStop)
@@ -88,4 +96,6 @@ public class CollisionController : MonoBehaviour
     {
         rigP.drag = 0;
     }
+
+   
 }

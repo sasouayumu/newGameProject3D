@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MousePlayerController : MoveController
 {
@@ -21,9 +23,12 @@ public class MousePlayerController : MoveController
     private bool coroutine = true;
     private bool coroutine2 = true;
     private bool move = true;
+    private bool key = false;
+    bool wallTouch;
+    public bool wallTouchgs { get { return wallTouch; } set { wallTouch = false; } }
     private Vector3 velocity;
     Rigidbody rbPlayer;
-
+    CollisionController collisionCon;
     public Vector3 NomalOfStickingWall { get; private set; } = Vector3.zero;
     // Start is called before the first frame update
     void Start()
@@ -64,18 +69,19 @@ public class MousePlayerController : MoveController
 
         }
 
-
+       
 
 
         //方向キーの入力値とカメラの向きから、移動方向を決定
-        Vector3 moveFoward = cameraFoward + Camera.main.transform.right * inputV;
+        //+Camera.main.transform.right * inputV
+        Vector3 moveFoward = cameraFoward;
 
         //スピードを上げる
         if (Input.GetMouseButton(1) && dush)
         {
             
             moveSpeed = 10f;
-            GetComponent<Renderer>().material.color = Color.blue;
+            GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
             if (coroutine)
             {
                 
@@ -86,7 +92,7 @@ public class MousePlayerController : MoveController
         }
         else
         {
-            GetComponent<Renderer>().material.color = Color.red;
+            GetComponent<Renderer>().material.color = UnityEngine.Color.red;
             if (!coroutine&&coroutine2)
             {
                 dush = false;
@@ -100,8 +106,32 @@ public class MousePlayerController : MoveController
             moveSpeed = 5f;
 
         }
+        //Debug.Log(wallTouch);
+        //壁にくっついている間に反対側に飛ぶようにする
+        if (Input.GetKeyDown("w")&&wallTouch)
+        {
+            Debug.Log("w");
+            wallTouch = false;
+            rbPlayer.velocity = Vector3.forward*10.0f;
+            rbPlayer.velocity = Vector3.up * 10.0f;
+            Debug.Log(rbPlayer.velocity);
+            
+        }
+        else if (wallTouch)
+        {
 
+        }
+        else
+        {
+            //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
+            rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
 
+            //キャラクターの向きを進行方向に
+            if (moveFoward != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(moveFoward);
+            }
+        }
 
         if (Input.GetKey(KeyCode.Space) && jump)
         {
@@ -110,37 +140,6 @@ public class MousePlayerController : MoveController
             jump = false;
         }
 
-        //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-        rbPlayer.velocity = moveInversion*moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
-
-        //キャラクターの向きを進行方向に
-        if (moveFoward != Vector3.zero)
-        {
-            transform.rotation = Quaternion.LookRotation(moveFoward);
-        }
-
-    }
-
-   
-
-    private void OnCollisionStay(Collision collision)
-    {
-        if(collision.gameObject.CompareTag("floor")|| collision.gameObject.CompareTag("Stand"))
-        {
-            jump = true;
-        }
-
-        //if (collision.gameObject.CompareTag("Stand"))
-        //{
-        //    Debug.Log("ジャンプかいし"+yPos);
-        //    Debug.Log("着地"+rbPlayer.velocity.y);
-
-        //    if(yPos > rbPlayer.velocity.y&& !jump)
-        //    {
-        //        enJump = true;
-        //        EnemyJump();
-        //    }
-        //}
     }
 
     //public bool EnemyJump()
@@ -165,25 +164,75 @@ public class MousePlayerController : MoveController
         coroutine2 = true;
         dush = true;
     }
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("Stand"))
+        {
+            jump = true;
+        }
 
-    //public void WallKick()
-    //{
-    //    if (this.velocity.y >= -0.05f) return;
+        //if (collision.gameObject.CompareTag("Stand"))
+        //{
+        //    Debug.Log("ジャンプかいし"+yPos);
+        //    Debug.Log("着地"+rbPlayer.velocity.y);
 
+        //    if(yPos > rbPlayer.velocity.y&& !jump)
+        //    {
+        //        enJump = true;
+        //        EnemyJump();
+        //    }
+        //}
 
-    //    this.transform.forward = this.NomalOfStickingWall;
+       
+    }
 
-    //    this.velocity = new Vector3(this.NomalOfStickingWall.x*this.wallKickHS+this.velocity.x,
-    //        this.wallKickVS,this.NomalOfStickingWall.z*this.wallKickHS+this.velocity.z);
-    //}
+    private void OnCollisionEnter(Collision collision)
+    {
+        //float moveHorizontal = Input.GetAxis("Horizontal");
+        //float moveVertical = Input.GetAxis("Vertical");
+        //Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
-    //public void StickWall(Vector3 normalOfStickingWall)
-    //{
-    //    if (this.jump) return;
+        if (collision.gameObject.CompareTag("Key"))
+        {
 
-    //    this.velocity = new Vector3(0f, this.velocity.y, 0f);
-    //    this.transform.rotation = Quaternion.LookRotation(-1 * normalOfStickingWall, Vector3.up);
-    //    this.NomalOfStickingWall = normalOfStickingWall;
-    //}
-    
+            key = true;
+        }
+
+        if (collision.gameObject.CompareTag("Goal") && key)
+        {
+
+            SceneManager.LoadScene(2);
+        }
+
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            UpwardForce();
+            //Vector3 normalVector = collision.contacts[0].normal;
+            //Debug.Log(normalVector.y);
+            //if(normalVector.y < 0.02f)
+            //{
+            //    this.mousePlayer.StickWall(normalVector);
+            //}
+            wallTouch = true;
+            //colPos = this.transform.position;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            wallTouch = false;
+            DownwardForce();
+        }
+    }
+    void UpwardForce()
+    {
+        rbPlayer.drag = 10;
+    }
+
+    void DownwardForce()
+    {
+        rbPlayer.drag = 0;
+    }
 }

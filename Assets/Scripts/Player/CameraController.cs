@@ -8,12 +8,14 @@ public class CameraController : MonoBehaviour
 
     GameObject targetObj;
     Vector3 targetPos;
-    private bool inversion = true;
+    private bool inversion = true; //ÉJÉÅÉâîΩì]
+    MousePlayerController MousePlayer;
     // Start is called before the first frame update
     void Start()
     {
         targetObj = GameObject.Find("Player");
         targetPos = targetObj.transform.position;
+        MousePlayer = targetObj.GetComponent<MousePlayerController>();
     }
 
     // Update is called once per frame
@@ -33,7 +35,7 @@ public class CameraController : MonoBehaviour
             transform.RotateAround(targetPos, Vector3.up, mouseInputX * 50f);
         }
 
-        if (Input.GetMouseButton(2)&& inversion)
+        if (Input.GetMouseButton(2)&& inversionÅ@||Input.GetKeyDown("w")&& MousePlayer.wallTouchgs)
         {
             inversion = false;
             transform.RotateAround(targetPos, Vector3.up, 180);
