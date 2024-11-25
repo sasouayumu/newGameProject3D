@@ -16,6 +16,7 @@ public class CameraController : MonoBehaviour
         targetObj = GameObject.Find("Player");
         targetPos = targetObj.transform.position;
         MousePlayer = targetObj.GetComponent<MousePlayerController>();
+
     }
 
     // Update is called once per frame
@@ -24,6 +25,18 @@ public class CameraController : MonoBehaviour
         //ターゲットの移動分、移動する
         transform.position += targetObj.transform.position - targetPos;
         targetPos = targetObj.transform.position;
+
+        if (Input.GetMouseButton(2) && inversion || Input.GetKeyDown("w") && MousePlayer.wallTouchgs)
+        {
+            //Debug.Log(MousePlayer.wallTouchgs);
+            inversion = false;
+            transform.RotateAround(targetPos, Vector3.up, 180);
+            
+        }
+        else if (!Input.GetMouseButton(2) && !inversion)
+        {
+            inversion = true;
+        }
 
         float mouseInputX;
         //マウスの右クリックを押している間
@@ -35,14 +48,10 @@ public class CameraController : MonoBehaviour
             transform.RotateAround(targetPos, Vector3.up, mouseInputX * 50f);
         }
 
-        if (Input.GetMouseButton(2)&& inversion　||Input.GetKeyDown("w")&& MousePlayer.wallTouchgs)
+        if (Input.GetKeyDown("w") && MousePlayer.wallTouchgs)
         {
-            inversion = false;
+            MousePlayer.rbWallKick.velocity = Vector3.up * 10 + -Vector3.right;
             transform.RotateAround(targetPos, Vector3.up, 180);
-        }
-        else if (!Input.GetMouseButton(2) && !inversion)
-        {
-            inversion = true;
         }
     }
 }

@@ -28,6 +28,7 @@ public class MousePlayerController : MoveController
     public bool wallTouchgs { get { return wallTouch; } set { wallTouch = false; } }
     private Vector3 velocity;
     Rigidbody rbPlayer;
+    public Rigidbody rbWallKick { get { return rbPlayer; } set{ rbPlayer = GetComponent<Rigidbody>(); } }
     CollisionController collisionCon;
     public Vector3 NomalOfStickingWall { get; private set; } = Vector3.zero;
     // Start is called before the first frame update
@@ -108,21 +109,19 @@ public class MousePlayerController : MoveController
         }
         //Debug.Log(wallTouch);
         //壁にくっついている間に反対側に飛ぶようにする
-        if (Input.GetKeyDown("w")&&wallTouch)
-        {
-            Debug.Log("w");
-            wallTouch = false;
-            rbPlayer.velocity = Vector3.forward*10.0f;
-            rbPlayer.velocity = Vector3.up * 10.0f;
-            Debug.Log(rbPlayer.velocity);
+        //if (Input.GetKeyDown("w")&&wallTouch)
+        //{
+        //    Debug.Log("w");
+        //    wallTouch = false;
+        //    //rbPlayer.velocity = Vector3.forward*10.0f;
+        //    //rbPlayer.velocity = Vector3.up * 10.0f;
+        //    //rbPlayer.velocity = Vector3.up * jumpForce*5 + -Vector3.right;
+        //    //rbPlayer.velocity = -Vector3.right;
+        //    Debug.Log(rbPlayer.velocity);
             
-        }
-        else if (wallTouch)
-        {
-
-        }
-        else
-        {
+        //}
+        //else
+        //{
             //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
             rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
 
@@ -131,7 +130,7 @@ public class MousePlayerController : MoveController
             {
                 transform.rotation = Quaternion.LookRotation(moveFoward);
             }
-        }
+        //}
 
         if (Input.GetKey(KeyCode.Space) && jump)
         {

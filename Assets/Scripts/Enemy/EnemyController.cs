@@ -11,6 +11,7 @@ public class EnemyController : MoveController
     float jump = 5f;
     Rigidbody rbEnemy;
     private bool floor = false;
+    private bool wall = false;
     MousePlayerController mpc;
     private bool canJump;
     // Start is called before the first frame update
@@ -41,6 +42,13 @@ public class EnemyController : MoveController
             floor = false;
            
         }
+
+        if (Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
+        {
+            rbEnemy.velocity = Vector3.up * 5 ;
+            wall = false;
+
+        }
     }
 
     private void OnCollisionStay(Collision collision)
@@ -50,6 +58,11 @@ public class EnemyController : MoveController
         {
             floor = true;
             
+        }
+
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            wall = true;
         }
     }
 }
