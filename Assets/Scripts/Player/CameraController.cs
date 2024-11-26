@@ -26,20 +26,24 @@ public class CameraController : MonoBehaviour
         transform.position += targetObj.transform.position - targetPos;
         targetPos = targetObj.transform.position;
 
-        if (Input.GetMouseButton(2) && inversion || Input.GetKeyDown("w") && MousePlayer.wallTouchgs)
+        //マウスホイールボタンを押している間カメラを反対に移動する
+        if (Input.GetMouseButtonDown(2) && inversion)
         {
             //Debug.Log(MousePlayer.wallTouchgs);
             inversion = false;
             transform.RotateAround(targetPos, Vector3.up, 180);
             
         }
-        else if (!Input.GetMouseButton(2) && !inversion)
+        
+        //マウスホイールボタンを離したらカメラを戻す
+        if (Input.GetMouseButtonUp(2))
         {
             inversion = true;
+            transform.RotateAround(targetPos, Vector3.up, 180);
         }
 
         float mouseInputX;
-        //マウスの右クリックを押している間
+        //マウスの左クリックを押している間
         if (Input.GetMouseButton(0))
         {
             //マウスの移動分公転させる
@@ -48,10 +52,13 @@ public class CameraController : MonoBehaviour
             transform.RotateAround(targetPos, Vector3.up, mouseInputX * 50f);
         }
 
-        if (Input.GetKeyDown("w") && MousePlayer.wallTouchgs)
+        //壁キックの判定　壁に当たりながら"W"Keyを押すとカメラを反転させ反対方向に飛ぶ
+        if (Input.GetKey("w") && MousePlayer.wallTouchgs)
         {
-            MousePlayer.rbWallKick.velocity = Vector3.up * 10 + -Vector3.right;
+            MousePlayer.rbWallKick.velocity = - 1 * Vector3.right +Vector3.up * 7;
             transform.RotateAround(targetPos, Vector3.up, 180);
+
+            
         }
     }
 }

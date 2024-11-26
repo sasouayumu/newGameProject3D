@@ -59,14 +59,17 @@ public class MousePlayerController : MoveController
         //カメラの方向からX-Z平面の単位ベクトルを取得
         Vector3 cameraFoward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
+        //マウスホイールを押すと背後を見れる
         if (Input.GetMouseButton(2) && move)
         {
             move = false;
             moveInversion *= -1;
         }
-        else if (!Input.GetMouseButton(2) && !move)
+        //離れると戻る
+        if (!Input.GetMouseButton(2) && !move)
         {
             move = true;
+            moveInversion *= -1;
 
         }
 
@@ -77,15 +80,14 @@ public class MousePlayerController : MoveController
         //+Camera.main.transform.right * inputV
         Vector3 moveFoward = cameraFoward;
 
-        //スピードを上げる
-        if (Input.GetMouseButton(1) && dush)
+        //右クリックで走るようにする（Playerの移動速度を上げる）空中ではジャンプできないようにする
+        if (Input.GetMouseButton(1) && dush && jump)
         {
             
             moveSpeed = 10f;
             GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
             if (coroutine)
             {
-                
                 coroutine = false;
                 StartCoroutine("DushCotroller");
             }
@@ -93,6 +95,7 @@ public class MousePlayerController : MoveController
         }
         else
         {
+            //一定時間走ったら速度をもとに戻す
             GetComponent<Renderer>().material.color = UnityEngine.Color.red;
             if (!coroutine&&coroutine2)
             {
@@ -118,25 +121,25 @@ public class MousePlayerController : MoveController
         //    //rbPlayer.velocity = Vector3.up * jumpForce*5 + -Vector3.right;
         //    //rbPlayer.velocity = -Vector3.right;
         //    Debug.Log(rbPlayer.velocity);
-            
+
         //}
         //else
         //{
-            //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-            rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
+        //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
+        rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
 
-            //キャラクターの向きを進行方向に
-            if (moveFoward != Vector3.zero)
-            {
-                transform.rotation = Quaternion.LookRotation(moveFoward);
-            }
+        //キャラクターの向きを進行方向に
+        if (moveFoward != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(moveFoward);
+        }
         //}
 
+        //スペースでジャンプ
         if (Input.GetKey(KeyCode.Space) && jump)
         {
             //yPos = rbPlayer.velocity.y;
             rbPlayer.velocity = Vector3.up * jumpForce;
-            jump = false;
         }
 
     }
@@ -146,6 +149,7 @@ public class MousePlayerController : MoveController
     //    return enJump;
     //}
 
+    //走るのをやめたら一定時間走れないようにする
     private IEnumerator DushCotroller()
     {
         
@@ -165,6 +169,7 @@ public class MousePlayerController : MoveController
     }
     private void OnCollisionStay(Collision collision)
     {
+        //二段ジャンプできないようにする（着地でジャンプできるようにする）
         if (collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("Stand"))
         {
             jump = true;
@@ -191,18 +196,21 @@ public class MousePlayerController : MoveController
         //float moveVertical = Input.GetAxis("Vertical");
         //Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
+        //カギの入手
         if (collision.gameObject.CompareTag("Key"))
         {
 
             key = true;
         }
 
+        //カギを持っていたらゴールできるようにする
         if (collision.gameObject.CompareTag("Goal") && key)
         {
 
             SceneManager.LoadScene(2);
         }
 
+        //壁に当たっている間は落下速度を落とす
         if (collision.gameObject.CompareTag("Wall"))
         {
             UpwardForce();
@@ -219,19 +227,27 @@ public class MousePlayerController : MoveController
 
     private void OnCollisionExit(Collision collision)
     {
+        //離れたら戻す
         if (collision.gameObject.CompareTag("Wall"))
         {
             wallTouch = false;
             DownwardForce();
         }
+
+        if (collision.gameObject.CompareTag("floor")|| collision.gameObject.CompareTag("Stand"))
+        {
+            jump = false;
+        }
     }
     void UpwardForce()
     {
+        //抵抗を増やす
         rbPlayer.drag = 10;
     }
 
     void DownwardForce()
     {
+        //抵抗を戻す
         rbPlayer.drag = 0;
     }
 }

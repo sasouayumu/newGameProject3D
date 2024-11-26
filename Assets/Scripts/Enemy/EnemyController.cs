@@ -45,9 +45,13 @@ public class EnemyController : MoveController
 
         if (Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
-            rbEnemy.velocity = Vector3.up * 5 ;
+            
+            rbEnemy.velocity = Vector3.up * jump*0.5f;
             wall = false;
 
+        }else if(Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
+        {
+            rbEnemy.velocity = Vector3.right*5;
         }
     }
 
