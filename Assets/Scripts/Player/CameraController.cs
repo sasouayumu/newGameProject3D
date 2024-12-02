@@ -6,10 +6,12 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 
-    GameObject targetObj;
-    Vector3 targetPos;
+    GameObject targetObj;//カメラが追従するオブジェクト
+    Vector3 targetPos;//追従するオブジェクトの場所
     private bool inversion = true; //カメラ反転
+    private bool wallKick = true;
     MousePlayerController MousePlayer;
+    public EnemyController EnemyController;
     // Start is called before the first frame update
     void Start()
     {
@@ -53,12 +55,21 @@ public class CameraController : MonoBehaviour
         }
 
         //壁キックの判定　壁に当たりながら"W"Keyを押すとカメラを反転させ反対方向に飛ぶ
-        if (Input.GetKey("w") && MousePlayer.wallTouchgs)
+        if (Input.GetKeyDown("w") && MousePlayer.wallTouchgs && wallKick)
         {
-            MousePlayer.rbWallKick.velocity = - 1 * Vector3.right +Vector3.up * 7;
             transform.RotateAround(targetPos, Vector3.up, 180);
-
-            
+            MousePlayer.rbWallKick.velocity = -1 * Vector3.right + Vector3.up * 8;
+            EnemyController.wallTouchPos = MousePlayer.transform.position;
+            EnemyController.GetSetwallKick = true;
+        }
+        else if (Input.GetKeyUp("w"))
+        {
+            //"W"key押しっぱなしで飛べないようにする
+            wallKick = true;
+        }
+        else
+        {
+            EnemyController.GetSetwallKick = false;
         }
     }
 }

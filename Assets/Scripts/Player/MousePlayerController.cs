@@ -10,7 +10,6 @@ using UnityEngine.SceneManagement;
 public class MousePlayerController : MoveController
 {
     private int moveInversion = 1;
-
     private float moveSpeed = 5f;
     //private float inputH;
     private float inputV;
@@ -41,16 +40,6 @@ public class MousePlayerController : MoveController
     // Update is called once per frame
     void Update()
     {
-        //float playermovement = input.getaxis("horizontal") * speed * time.deltatime;
-        //transform.translate(playermovement, 0, 0);
-
-        //float m = input.getaxis("mouse x");
-        //if (mathf.abs(m) > 0.001f)
-        //{
-        //    transform.rotatearound(transform.position, vector3.up, m);
-        //}
-
-        //inputH = Input.GetAxisRaw("Horizontal");
         inputV = Input.GetAxisRaw("Vertical");
     }
 
@@ -72,9 +61,6 @@ public class MousePlayerController : MoveController
             moveInversion *= -1;
 
         }
-
-       
-
 
         //方向キーの入力値とカメラの向きから、移動方向を決定
         //+Camera.main.transform.right * inputV
@@ -110,21 +96,7 @@ public class MousePlayerController : MoveController
             moveSpeed = 5f;
 
         }
-        //Debug.Log(wallTouch);
-        //壁にくっついている間に反対側に飛ぶようにする
-        //if (Input.GetKeyDown("w")&&wallTouch)
-        //{
-        //    Debug.Log("w");
-        //    wallTouch = false;
-        //    //rbPlayer.velocity = Vector3.forward*10.0f;
-        //    //rbPlayer.velocity = Vector3.up * 10.0f;
-        //    //rbPlayer.velocity = Vector3.up * jumpForce*5 + -Vector3.right;
-        //    //rbPlayer.velocity = -Vector3.right;
-        //    Debug.Log(rbPlayer.velocity);
-
-        //}
-        //else
-        //{
+       
         //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
         rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
 
@@ -144,11 +116,6 @@ public class MousePlayerController : MoveController
 
     }
 
-    //public bool EnemyJump()
-    //{
-    //    return enJump;
-    //}
-
     //走るのをやめたら一定時間走れないようにする
     private IEnumerator DushCotroller()
     {
@@ -167,6 +134,7 @@ public class MousePlayerController : MoveController
         coroutine2 = true;
         dush = true;
     }
+
     private void OnCollisionStay(Collision collision)
     {
         //二段ジャンプできないようにする（着地でジャンプできるようにする）
@@ -174,28 +142,10 @@ public class MousePlayerController : MoveController
         {
             jump = true;
         }
-
-        //if (collision.gameObject.CompareTag("Stand"))
-        //{
-        //    Debug.Log("ジャンプかいし"+yPos);
-        //    Debug.Log("着地"+rbPlayer.velocity.y);
-
-        //    if(yPos > rbPlayer.velocity.y&& !jump)
-        //    {
-        //        enJump = true;
-        //        EnemyJump();
-        //    }
-        //}
-
-       
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        //float moveHorizontal = Input.GetAxis("Horizontal");
-        //float moveVertical = Input.GetAxis("Vertical");
-        //Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-
         //カギの入手
         if (collision.gameObject.CompareTag("Key"))
         {
@@ -214,14 +164,7 @@ public class MousePlayerController : MoveController
         if (collision.gameObject.CompareTag("Wall"))
         {
             UpwardForce();
-            //Vector3 normalVector = collision.contacts[0].normal;
-            //Debug.Log(normalVector.y);
-            //if(normalVector.y < 0.02f)
-            //{
-            //    this.mousePlayer.StickWall(normalVector);
-            //}
             wallTouch = true;
-            //colPos = this.transform.position;
         }
     }
 

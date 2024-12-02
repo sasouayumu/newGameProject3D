@@ -802,6 +802,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39c62128851efde46ae8c9da1f96044b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnemyController: {fileID: 1030533450}
 --- !u!1 &1030533449
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,6 +817,7 @@ GameObject:
   - component: {fileID: 1030533452}
   - component: {fileID: 1030533450}
   - component: {fileID: 1030533456}
+  - component: {fileID: 1030533457}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -835,6 +837,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d286db8a8bdd284facddc8a0b597e18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wallTouchPos: {x: 0, y: 0, z: 0}
   speed: 5
 --- !u!65 &1030533452
 BoxCollider:
@@ -949,6 +952,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 32
   m_CollisionDetection: 0
+--- !u!114 &1030533457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030533449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e67f3239e2daac43b8e6dc74abb46c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1181680684
 GameObject:
   m_ObjectHideFlags: 0
