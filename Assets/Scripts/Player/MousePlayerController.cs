@@ -9,27 +9,30 @@ using UnityEngine.SceneManagement;
 
 public class MousePlayerController : MoveController
 {
-    private int moveInversion = 1;
-    private float moveSpeed = 5f;
+    private int moveInversion = 1;//後ろを向くときに移動方向をそのままにする
+    private float moveSpeed = 5f;//移動速度
     //private float inputH;
     private float inputV;
-    private float jumpForce = 5f;
-    [SerializeField] private float wallKickHS = 3f;
-    [SerializeField] private float wallKickVS = 3f;
-    [SerializeField] private float maxStickWallKickFS = 1f;
-    private bool jump = true;
+    private float jumpForce = 5f;//ジャンプ力
+    //[SerializeField] private float wallKickHS = 3f;
+    //[SerializeField] private float wallKickVS = 3f;
+    //[SerializeField] private float maxStickWallKickFS = 1f;
+    //ジャンプや走る処理の判定
+    public  bool jump = true;
     private bool dush = true;
     private bool coroutine = true;
     private bool coroutine2 = true;
     private bool move = true;
     private bool key = false;
-    bool wallTouch;
+    //壁の当たり判定
+    private bool wallTouch;
     public bool wallTouchgs { get { return wallTouch; } set { wallTouch = false; } }
+    //Player移動用の座標
     private Vector3 velocity;
-    Rigidbody rbPlayer;
-    public Rigidbody rbWallKick { get { return rbPlayer; } set{ rbPlayer = GetComponent<Rigidbody>(); } }
-    CollisionController collisionCon;
-    public Vector3 NomalOfStickingWall { get; private set; } = Vector3.zero;
+    //PlayerのRigidbody
+    private　Rigidbody rbPlayer;
+    public Rigidbody rbWallKick { get { return rbPlayer; } set{ rbPlayer = GetComponent<Rigidbody>(); } }//引き渡し用
+    //public Vector3 NomalOfStickingWall { get; private set; } = Vector3.zero;
     // Start is called before the first frame update
     void Start()
     {
@@ -156,7 +159,6 @@ public class MousePlayerController : MoveController
         //カギを持っていたらゴールできるようにする
         if (collision.gameObject.CompareTag("Goal") && key)
         {
-
             SceneManager.LoadScene(2);
         }
 
@@ -182,6 +184,8 @@ public class MousePlayerController : MoveController
             jump = false;
         }
     }
+
+    //壁に当たっている間、落ちる速度を落とす
     void UpwardForce()
     {
         //抵抗を増やす

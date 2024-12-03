@@ -9,9 +9,9 @@ public class CameraController : MonoBehaviour
     GameObject targetObj;//カメラが追従するオブジェクト
     Vector3 targetPos;//追従するオブジェクトの場所
     private bool inversion = true; //カメラ反転
-    private bool wallKick = true;
-    MousePlayerController MousePlayer;
-    public EnemyController EnemyController;
+    private bool wallKick = true;//壁キック用の判定
+    private MousePlayerController MousePlayer;//Playerのスクリプト取得用
+    private EnemyController EnemyController;//敵のスクリプト取得用
     // Start is called before the first frame update
     void Start()
     {
@@ -34,11 +34,9 @@ public class CameraController : MonoBehaviour
             //Debug.Log(MousePlayer.wallTouchgs);
             inversion = false;
             transform.RotateAround(targetPos, Vector3.up, 180);
-            
-        }
-        
-        //マウスホイールボタンを離したらカメラを戻す
-        if (Input.GetMouseButtonUp(2))
+
+        }//マウスホイールボタンを離したらカメラを戻す
+        else if (Input.GetMouseButtonUp(2))
         {
             inversion = true;
             transform.RotateAround(targetPos, Vector3.up, 180);
@@ -59,7 +57,11 @@ public class CameraController : MonoBehaviour
         {
             transform.RotateAround(targetPos, Vector3.up, 180);
             MousePlayer.rbWallKick.velocity = -1 * Vector3.right + Vector3.up * 8;
-            EnemyController.wallTouchPos = MousePlayer.transform.position;
+            //一度だけ敵に壁に当たった位置を送る
+            if (!EnemyController.GetSetwallKick)
+            {
+                EnemyController.wallTouchPos = MousePlayer.transform.position;
+            }
             EnemyController.GetSetwallKick = true;
         }
         else if (Input.GetKeyUp("w"))
@@ -67,7 +69,7 @@ public class CameraController : MonoBehaviour
             //"W"key押しっぱなしで飛べないようにする
             wallKick = true;
         }
-        else
+        else if(MousePlayer.jump)
         {
             EnemyController.GetSetwallKick = false;
         }

@@ -5,19 +5,23 @@ using UnityEngine;
 
 public class EnemyController : MoveController
 {
-    Transform playerTr;
-    Transform enemyTr;
+    private Transform playerTr;//Playerの座標
+    private Transform enemyTr;//敵の座標
+    private Transform trans;//回転用の座標
+    //引き渡し用のPlayerの壁に当たった座標
     public Vector3 wallTouchPos;
     public Vector3 SetGetwallTouchPos { get { return wallTouchPos; } set { wallTouchPos = value; } }
-    [SerializeField] float speed = 4;
-    float jump = 5f;
-    Rigidbody rbEnemy;
+    private Vector3 prevPos;//回転用のプライベート座標
+    [SerializeField] float speed = 4;//移動速度
+    private float jump = 5f;//ジャンプの強さ
+    private Rigidbody rbEnemy;//敵のRigidbody情報
+    //当たり判定用
     private bool floor = false;
     private bool wall = false;
-    private bool CheckWallKick;
+    //Playerの壁キックの当たり判定
+    public  bool CheckWallKick;
     public bool GetSetwallKick { get { return CheckWallKick; } set { CheckWallKick = value; } }
     MousePlayerController mpc;
-    private bool canJump;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,14 +31,14 @@ public class EnemyController : MoveController
         rbEnemy = GetComponent<Rigidbody>();
         GameObject player = GameObject.Find("Player");
         mpc = player.GetComponent<MousePlayerController>();
+        trans = transform;
+        prevPos = trans.position;
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-       
         //Playerが高い場所に行き、FloorがTrueならジャンプする
         if(Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)
         {
@@ -44,23 +48,26 @@ public class EnemyController : MoveController
         }
 
         //Playerが上にいて壁にくっついているなら壁を上る
-        if (Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
+        if (Mathf.Floor(playerTr.transform.position.y) >= Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
-            rbEnemy.velocity = Vector3.up * jump*0.25f;
-            wall = false;
+            rbEnemy.velocity = Vector3.up * jump*0.35f;
+            //wall = false;
 
-        }else if(Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
+        }else if(Mathf.Floor(playerTr.transform.position.y) < Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
-            //壁にくっついていてPlayerと同じ高さにいるなら反対側へジャンプする
-            rbEnemy.velocity = Vector3.right*10;
+            //壁にくっついていてPlayerと同じ高さにいるならPlayerの方向へ飛ぶ
+            transform.position =
+                 Vector3.MoveTowards(transform.position,
+                 new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
+                 speed * Time.deltaTime*2);
         }
-        else if (GetSetwallKick)
+        else if (GetSetwallKick&& transform.position != SetGetwallTouchPos &&!wall)
         {
             //Playerが壁キックしている間は別の方法で場所を取得
             transform.position =
-               Vector3.MoveTowards(transform.position,SetGetwallTouchPos,speed * Time.deltaTime);
+               Vector3.MoveTowards(transform.position, SetGetwallTouchPos, speed * Time.deltaTime);
         }
-        else 
+        else if(Mathf.Floor(playerTr.transform.position.y) <= Mathf.Floor(enemyTr.transform.position.y))
         {
             //Playerの位置を取得してその方向に進む
             transform.position =
@@ -68,6 +75,24 @@ public class EnemyController : MoveController
                 new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
                 speed * Time.deltaTime);
         }
+        //現在フレームのワールド位置
+        var pos = trans.position;
+
+        //移動量計算
+        var delta = pos - prevPos;
+
+        //次のUpdateで使うための前フレーム位置更新
+        prevPos = pos;
+
+        //静止している状態だと、進行方向を特定できないため回転しない
+        if (delta == Vector3.zero)
+            return;
+        
+        //進行方向に向くようにクォータニオンを取得
+        var rotation = Quaternion.LookRotation(delta, Vector3.up);
+
+        //オブジェクトに反映
+        trans.rotation = rotation;
     }
 
     private void OnCollisionStay(Collision collision)
@@ -76,13 +101,19 @@ public class EnemyController : MoveController
         if (collision.gameObject.CompareTag("Stand")|| collision.gameObject.CompareTag("floor"))
         {
             floor = true;
-            
         }
 
         //壁の当たり判定
         if (collision.gameObject.CompareTag("Wall"))
         {
             wall = true;
+        }
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            wall = false;
         }
     }
 }
