@@ -10,13 +10,9 @@ using UnityEngine.SceneManagement;
 public class MousePlayerController : MoveController
 {
     private int moveInversion = 1;//後ろを向くときに移動方向をそのままにする
-    private float moveSpeed = 5f;//移動速度
-    //private float inputH;
+    private float moveSpeed = 7f;//移動速度
     private float inputV;
     private float jumpForce = 5f;//ジャンプ力
-    //[SerializeField] private float wallKickHS = 3f;
-    //[SerializeField] private float wallKickVS = 3f;
-    //[SerializeField] private float maxStickWallKickFS = 1f;
     //ジャンプや走る処理の判定
     public  bool jump = true;
     private bool dush = true;
@@ -32,11 +28,11 @@ public class MousePlayerController : MoveController
     //PlayerのRigidbody
     private　Rigidbody rbPlayer;
     public Rigidbody rbWallKick { get { return rbPlayer; } set{ rbPlayer = GetComponent<Rigidbody>(); } }//引き渡し用
-    //public Vector3 NomalOfStickingWall { get; private set; } = Vector3.zero;
-    // Start is called before the first frame update
+    private Animator animator;
     void Start()
     {
         rbPlayer = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -71,7 +67,7 @@ public class MousePlayerController : MoveController
         //右クリックで走るようにする（Playerの移動速度を上げる）空中ではジャンプできないようにする
         if (Input.GetMouseButton(1) && dush && jump)
         {
-            moveSpeed = 10f;
+            moveSpeed = 11f;
             //GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
             if (coroutine)
             {
@@ -93,7 +89,7 @@ public class MousePlayerController : MoveController
                 StartCoroutine("DushStop");
             }
             
-            moveSpeed = 5f;
+            moveSpeed = 7f;
         }
        
         //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
@@ -109,7 +105,7 @@ public class MousePlayerController : MoveController
         //スペースでジャンプ
         if (Input.GetKey(KeyCode.Space) && jump)
         {
-            //yPos = rbPlayer.velocity.y;
+            animator.Play("Jump",0,0);//ジャンプのモーション
             rbPlayer.velocity = Vector3.up * jumpForce;
         }
     }
@@ -137,6 +133,7 @@ public class MousePlayerController : MoveController
         if (collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("Stand"))
         {
             jump = true;
+            animator.Play("Idle");//着地したら走るモーションに戻す
         }
     }
 
@@ -188,5 +185,10 @@ public class MousePlayerController : MoveController
     {
         //抵抗を戻す
         rbPlayer.drag = 0;
+    }
+
+    void OnCallChangeFace()
+    {
+
     }
 }
