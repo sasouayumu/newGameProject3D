@@ -44,7 +44,6 @@ public class EnemyController : MoveController
         {
             rbEnemy.velocity = Vector3.up * jump;
             floor = false;
-           
         }
 
         //Playerが上にいて壁にくっついているなら壁を上る
@@ -63,11 +62,11 @@ public class EnemyController : MoveController
         }
         else if (GetSetwallKick&& transform.position != SetGetwallTouchPos &&!wall)
         {
-            //Playerが壁キックしている間は別の方法で場所を取得
+            //Playerが壁キックしている間はPlayerが壁に当たった場所へ進むようにする
             transform.position =
                Vector3.MoveTowards(transform.position, SetGetwallTouchPos, speed * Time.deltaTime);
         }
-        else if(Mathf.Floor(playerTr.transform.position.y) <= Mathf.Floor(enemyTr.transform.position.y))
+        else //if(Mathf.Floor(playerTr.transform.position.y) <= Mathf.Floor(enemyTr.transform.position.y))
         {
             //Playerの位置を取得してその方向に進む
             transform.position =
@@ -75,6 +74,7 @@ public class EnemyController : MoveController
                 new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
                 speed * Time.deltaTime);
         }
+        //Playerと同じ方向を向くようにする処理
         //現在フレームのワールド位置
         var pos = trans.position;
 

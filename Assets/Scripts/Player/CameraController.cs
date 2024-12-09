@@ -6,19 +6,23 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 
-    GameObject targetObj;//カメラが追従するオブジェクト
-    Vector3 targetPos;//追従するオブジェクトの場所
+    private GameObject targetObj;//カメラが追従するオブジェクト
+    private GameObject enemyObj;//Enemyオブジェクト
+    private Vector3 targetPos;//追従するオブジェクトの場所
     private bool inversion = true; //カメラ反転
     private bool wallKick = true;//壁キック用の判定
     private MousePlayerController MousePlayer;//Playerのスクリプト取得用
     private EnemyController EnemyController;//敵のスクリプト取得用
+
     // Start is called before the first frame update
     void Start()
     {
+        //PlayerとEnemyの情報を取得
         targetObj = GameObject.Find("Player");
+        enemyObj = GameObject.Find("Enemy");
         targetPos = targetObj.transform.position;
         MousePlayer = targetObj.GetComponent<MousePlayerController>();
-
+        EnemyController = enemyObj.GetComponent<EnemyController>();
     }
 
     // Update is called once per frame
@@ -71,6 +75,7 @@ public class CameraController : MonoBehaviour
         }
         else if(MousePlayer.jump)
         {
+            //Playerが地面にいる間は壁キックする処理をしないようにする
             EnemyController.GetSetwallKick = false;
         }
     }

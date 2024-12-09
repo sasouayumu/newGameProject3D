@@ -37,7 +37,6 @@ public class MousePlayerController : MoveController
     void Start()
     {
         rbPlayer = GetComponent<Rigidbody>();
-        
     }
 
     // Update is called once per frame
@@ -72,20 +71,18 @@ public class MousePlayerController : MoveController
         //右クリックで走るようにする（Playerの移動速度を上げる）空中ではジャンプできないようにする
         if (Input.GetMouseButton(1) && dush && jump)
         {
-            
             moveSpeed = 10f;
-            GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
+            //GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
             if (coroutine)
             {
                 coroutine = false;
                 StartCoroutine("DushCotroller");
             }
-
         }
         else
         {
             //一定時間走ったら速度をもとに戻す
-            GetComponent<Renderer>().material.color = UnityEngine.Color.red;
+            //GetComponent<Renderer>().material.color = UnityEngine.Color.red;
             if (!coroutine&&coroutine2)
             {
                 dush = false;
@@ -97,7 +94,6 @@ public class MousePlayerController : MoveController
             }
             
             moveSpeed = 5f;
-
         }
        
         //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
@@ -116,13 +112,11 @@ public class MousePlayerController : MoveController
             //yPos = rbPlayer.velocity.y;
             rbPlayer.velocity = Vector3.up * jumpForce;
         }
-
     }
 
     //走るのをやめたら一定時間走れないようにする
     private IEnumerator DushCotroller()
     {
-        
         yield return new WaitForSeconds(3.0f);
         dush = false;
         
@@ -131,7 +125,6 @@ public class MousePlayerController : MoveController
 
     private IEnumerator DushStop()
     {
-        
         yield return new WaitForSeconds(3.0f);
         
         coroutine2 = true;
@@ -152,7 +145,6 @@ public class MousePlayerController : MoveController
         //カギの入手
         if (collision.gameObject.CompareTag("Key"))
         {
-
             key = true;
         }
 
