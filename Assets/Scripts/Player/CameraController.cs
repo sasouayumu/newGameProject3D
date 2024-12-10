@@ -5,24 +5,23 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-
     private GameObject targetObj;//カメラが追従するオブジェクト
     private GameObject enemyObj;//Enemyオブジェクト
     private Vector3 targetPos;//追従するオブジェクトの場所
     private bool inversion = true; //カメラ反転
-    private bool wallKick = true;//壁キック用の判定
-    private MousePlayerController MousePlayer;//Playerのスクリプト取得用
-    private EnemyController EnemyController;//敵のスクリプト取得用
+    //private bool wallKick = true;//壁キック用の判定
+    //private MousePlayerController MousePlayer;//Playerのスクリプト取得用
+    //private EnemyController EnemyController;//敵のスクリプト取得用
 
     // Start is called before the first frame update
     void Start()
     {
         //PlayerとEnemyの情報を取得
         targetObj = GameObject.Find("Player");
-        enemyObj = GameObject.Find("Enemy");
+        //enemyObj = GameObject.Find("Enemy");
         targetPos = targetObj.transform.position;
-        MousePlayer = targetObj.GetComponent<MousePlayerController>();
-        EnemyController = enemyObj.GetComponent<EnemyController>();
+        //MousePlayer = targetObj.GetComponent<MousePlayerController>();
+        //EnemyController = enemyObj.GetComponent<EnemyController>();
     }
 
     // Update is called once per frame
@@ -55,28 +54,9 @@ public class CameraController : MonoBehaviour
 
             transform.RotateAround(targetPos, Vector3.up, mouseInputX * 50f);
         }
-
-        //壁キックの判定　壁に当たりながら"W"Keyを押すとカメラを反転させ反対方向に飛ぶ
-        if (Input.GetKeyDown("w") && MousePlayer.wallTouchgs && wallKick)
-        {
-            transform.RotateAround(targetPos, Vector3.up, 180);
-            MousePlayer.rbWallKick.velocity = -1 * Vector3.right + Vector3.up * 8;
-            //一度だけ敵に壁に当たった位置を送る
-            if (!EnemyController.GetSetwallKick)
-            {
-                EnemyController.wallTouchPos = MousePlayer.transform.position;
-            }
-            EnemyController.GetSetwallKick = true;
-        }
-        else if (Input.GetKeyUp("w"))
-        {
-            //"W"key押しっぱなしで飛べないようにする
-            wallKick = true;
-        }
-        else if(MousePlayer.jump)
-        {
-            //Playerが地面にいる間は壁キックする処理をしないようにする
-            EnemyController.GetSetwallKick = false;
-        }
+    }
+    public void InversionCamera()
+    {
+        transform.RotateAround(targetPos, Vector3.up, 180);
     }
 }

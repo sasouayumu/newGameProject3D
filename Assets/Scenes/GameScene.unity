@@ -903,10 +903,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.29701805
-  m_Height: 0.9418105
+  m_Radius: 0.20558944
+  m_Height: 0.912984
   m_Direction: 1
-  m_Center: {x: 0.008121312, y: 0.5240652, z: 0.026007026}
+  m_Center: {x: -0.04086651, y: 0.53847843, z: 0.0015370846}
 --- !u!54 &1432057427
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -947,6 +947,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jump: 1
+  CameraController: {fileID: 963194229}
 --- !u!1 &1476433108
 GameObject:
   m_ObjectHideFlags: 0
@@ -1375,7 +1376,7 @@ Transform:
   m_GameObject: {fileID: 1904023472}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -19.7, y: 2.4, z: 5.53}
+  m_LocalPosition: {x: -19.7, y: 2.5, z: 5.53}
   m_LocalScale: {x: 16, y: 1, z: 16}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1522,8 +1523,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2041425579
-BoxCollider:
+--- !u!135 &2041425579
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1541,7 +1542,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2043326197
 GameObject:

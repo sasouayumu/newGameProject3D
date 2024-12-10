@@ -12,7 +12,7 @@ public class MousePlayerController : MoveController
     private int moveInversion = 1;//後ろを向くときに移動方向をそのままにする
     private float moveSpeed = 7f;//移動速度
     private float inputV;
-    private float jumpForce = 5f;//ジャンプ力
+    private float jumpForce = 6f;//ジャンプ力
     //ジャンプや走る処理の判定
     public  bool jump = true;
     private bool dush = true;
@@ -20,6 +20,7 @@ public class MousePlayerController : MoveController
     private bool coroutine2 = true;
     private bool move = true;
     private bool key = false;
+    private bool wkey = false;
     //壁の当たり判定
     private bool wallTouch;
     public bool wallTouchgs { get { return wallTouch; } set { wallTouch = false; } }
@@ -27,12 +28,17 @@ public class MousePlayerController : MoveController
     private Vector3 velocity;
     //PlayerのRigidbody
     private　Rigidbody rbPlayer;
-    public Rigidbody rbWallKick { get { return rbPlayer; } set{ rbPlayer = GetComponent<Rigidbody>(); } }//引き渡し用
+    //public Rigidbody rbWallKick { get { return rbPlayer; } set{ rbPlayer = GetComponent<Rigidbody>(); } }//引き渡し用
     private Animator animator;
+    private EnemyController EnemyController;
+    public CameraController CameraController;
+    
     void Start()
     {
         rbPlayer = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        GameObject enemyObj = GameObject.Find("Enemy");
+        EnemyController = enemyObj.GetComponent<EnemyController>();
     }
 
     // Update is called once per frame
@@ -51,15 +57,20 @@ public class MousePlayerController : MoveController
         {
             move = false;
             moveInversion *= -1;
+            
         }
         //離れると戻る
         if (!Input.GetMouseButton(2) && !move)
         {
             move = true;
             moveInversion *= -1;
-
         }
 
+        if (Input.GetKeyDown("w"))
+        {
+            wkey = true;
+        }
+        
         //方向キーの入力値とカメラの向きから、移動方向を決定
         //+Camera.main.transform.right * inputV
         Vector3 moveFoward = cameraFoward;
@@ -67,7 +78,7 @@ public class MousePlayerController : MoveController
         //右クリックで走るようにする（Playerの移動速度を上げる）空中ではジャンプできないようにする
         if (Input.GetMouseButton(1) && dush && jump)
         {
-            moveSpeed = 11f;
+            moveSpeed = 12;
             //GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
             if (coroutine)
             {
@@ -89,7 +100,7 @@ public class MousePlayerController : MoveController
                 StartCoroutine("DushStop");
             }
             
-            moveSpeed = 7f;
+            moveSpeed = 7;
         }
        
         //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
@@ -135,6 +146,8 @@ public class MousePlayerController : MoveController
             jump = true;
             animator.Play("Idle");//着地したら走るモーションに戻す
         }
+
+       
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -155,8 +168,26 @@ public class MousePlayerController : MoveController
         if (collision.gameObject.CompareTag("Wall"))
         {
             UpwardForce();
-            wallTouch = true;
+            if (wkey)
+            {
+                animator.Play("Jump", 0, 0);//ジャンプのモーション
+                rbPlayer.velocity = Vector3.up * 10;
+                CameraController.InversionCamera();
+                //一度だけ敵に壁に当たった位置を送る
+                if (!EnemyController.GetSetwallKick)
+                {
+                    EnemyController.wallTouchPos = transform.position;
+                }
+                EnemyController.GetSetwallKick = true;
+                wkey = false;
+            }
         }
+        else if (jump)
+        {
+            //Playerが地面にいる間はEnemyは壁キックする処理をしないようにする
+            EnemyController.GetSetwallKick = false;
+        }
+       
     }
 
     private void OnCollisionExit(Collision collision)
@@ -164,7 +195,6 @@ public class MousePlayerController : MoveController
         //離れたら戻す
         if (collision.gameObject.CompareTag("Wall"))
         {
-            wallTouch = false;
             DownwardForce();
         }
 
