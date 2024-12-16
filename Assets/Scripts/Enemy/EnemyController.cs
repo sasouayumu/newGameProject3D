@@ -40,19 +40,19 @@ public class EnemyController : MoveController
     void Update()
     {
         //Playerが高い場所に行き、FloorがTrueならジャンプする
-        if(Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)
+        if(Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)
         {
             rbEnemy.velocity = Vector3.up * jump;
             floor = false;
+            Debug.Log("jump");
         }
 
         //Playerが上にいて壁にくっついているなら壁を上る
-        if (Mathf.Floor(playerTr.transform.position.y) >= Mathf.Floor(enemyTr.transform.position.y) && wall)
+        if (Mathf.Floor(playerTr.transform.position.y) >  Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
-            rbEnemy.velocity = Vector3.up * jump*0.35f;
-            //wall = false;
-
-        }else if(Mathf.Floor(playerTr.transform.position.y) < Mathf.Floor(enemyTr.transform.position.y) && wall)
+            rbEnemy.velocity = Vector3.up * jump*0.5f;
+        }
+        else if(Mathf.Floor(playerTr.transform.position.y) < Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
             //壁にくっついていてPlayerと同じ高さにいるならPlayerの方向へ飛ぶ
             transform.position =
@@ -60,19 +60,21 @@ public class EnemyController : MoveController
                  new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
                  speed * Time.deltaTime*2);
         }
-        else if (GetSetwallKick&& transform.position != SetGetwallTouchPos &&!wall)
+        else if (GetSetwallKick&& transform.position != SetGetwallTouchPos)
         {
             //Playerが壁キックしている間はPlayerが壁に当たった場所へ進むようにする
             transform.position =
                Vector3.MoveTowards(transform.position, SetGetwallTouchPos, speed * Time.deltaTime);
         }
-        else //if(Mathf.Floor(playerTr.transform.position.y) <= Mathf.Floor(enemyTr.transform.position.y))
+        else// if(Mathf.Floor(playerTr.transform.position.y) <= Mathf.Floor(enemyTr.transform.position.y))
         {
             //Playerの位置を取得してその方向に進む
             transform.position =
                 Vector3.MoveTowards(transform.position,
                 new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
                 speed * Time.deltaTime);
+            Debug.Log("susumu");
+            
         }
         //Playerと同じ方向を向くようにする処理
         //現在フレームのワールド位置

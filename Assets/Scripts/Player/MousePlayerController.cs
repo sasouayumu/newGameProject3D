@@ -33,12 +33,14 @@ public class MousePlayerController : MoveController
     private EnemyController EnemyController;
     public CameraController CameraController;
     
+    
     void Start()
     {
         rbPlayer = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         GameObject enemyObj = GameObject.Find("Enemy");
         EnemyController = enemyObj.GetComponent<EnemyController>();
+        
     }
 
     // Update is called once per frame
@@ -52,23 +54,9 @@ public class MousePlayerController : MoveController
         //カメラの方向からX-Z平面の単位ベクトルを取得
         Vector3 cameraFoward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
-        //マウスホイールを押すと背後を見れる
-        if (Input.GetMouseButton(2) && move)
-        {
-            move = false;
-            moveInversion *= -1;
-            
-        }
-        //離れると戻る
-        if (!Input.GetMouseButton(2) && !move)
-        {
-            move = true;
-            moveInversion *= -1;
-        }
-
         if (Input.GetKeyDown("w"))
         {
-            wkey = true;
+            StartCoroutine("WkeyDown");
         }
         
         //方向キーの入力値とカメラの向きから、移動方向を決定
@@ -120,7 +108,12 @@ public class MousePlayerController : MoveController
             rbPlayer.velocity = Vector3.up * jumpForce;
         }
     }
-
+    private IEnumerator WkeyDown()
+    {
+        wkey = true;
+        yield return new WaitForSeconds(0.1f);
+        wkey = false;
+    }
     //走るのをやめたら一定時間走れないようにする
     private IEnumerator DushCotroller()
     {
@@ -164,7 +157,6 @@ public class MousePlayerController : MoveController
             SceneManager.LoadScene(2);
         }
 
-        //壁に当たっている間は落下速度を落とす
         if (collision.gameObject.CompareTag("Wall"))
         {
             UpwardForce();
@@ -182,7 +174,7 @@ public class MousePlayerController : MoveController
                 wkey = false;
             }
         }
-        else if (jump)
+        else
         {
             //Playerが地面にいる間はEnemyは壁キックする処理をしないようにする
             EnemyController.GetSetwallKick = false;
