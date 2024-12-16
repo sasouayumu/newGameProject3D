@@ -37,7 +37,7 @@ public class EnemyController : MoveController
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //Playerが高い場所に行き、FloorがTrueならジャンプする
         if(Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)

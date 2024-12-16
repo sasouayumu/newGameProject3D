@@ -200,7 +200,7 @@ public class MousePlayerController : MoveController
     void UpwardForce()
     {
         //’ïR‚ğ‘‚â‚·
-        rbPlayer.drag = 10;
+        rbPlayer.drag = 5;
     }
 
     void DownwardForce()
