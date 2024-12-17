@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 public class MousePlayerController : MoveController
 {
     private int moveInversion = 1;//後ろを向くときに移動方向をそのままにする
-    private float moveSpeed = 7f;//移動速度
+    private float moveSpeed = 8f;//移動速度
     private float inputV;
     private float jumpForce = 6f;//ジャンプ力
     //ジャンプや走る処理の判定
@@ -66,7 +66,7 @@ public class MousePlayerController : MoveController
         //右クリックで走るようにする（Playerの移動速度を上げる）空中ではジャンプできないようにする
         if (Input.GetMouseButton(1) && dush && jump)
         {
-            moveSpeed = 12;
+            moveSpeed = 15;
             //GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
             if (coroutine)
             {
@@ -88,7 +88,7 @@ public class MousePlayerController : MoveController
                 StartCoroutine("DushStop");
             }
             
-            moveSpeed = 7;
+            moveSpeed = 8;
         }
        
         //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
@@ -97,7 +97,7 @@ public class MousePlayerController : MoveController
         //キャラクターの向きを進行方向に
         if (moveFoward != Vector3.zero)
         {
-            transform.rotation = Quaternion.LookRotation(moveFoward);
+            transform.rotation = Quaternion.LookRotation(moveFoward*Time.deltaTime);
         }
         //}
 
@@ -139,8 +139,6 @@ public class MousePlayerController : MoveController
             jump = true;
             animator.Play("Idle");//着地したら走るモーションに戻す
         }
-
-       
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -163,7 +161,7 @@ public class MousePlayerController : MoveController
             if (wkey)
             {
                 animator.Play("Jump", 0, 0);//ジャンプのモーション
-                rbPlayer.velocity = Vector3.up * 10;
+                rbPlayer.velocity = Vector3.up * 7;
                 CameraController.InversionCamera();
                 //一度だけ敵に壁に当たった位置を送る
                 if (!EnemyController.GetSetwallKick)
@@ -179,7 +177,6 @@ public class MousePlayerController : MoveController
             //Playerが地面にいる間はEnemyは壁キックする処理をしないようにする
             EnemyController.GetSetwallKick = false;
         }
-       
     }
 
     private void OnCollisionExit(Collision collision)
@@ -200,7 +197,7 @@ public class MousePlayerController : MoveController
     void UpwardForce()
     {
         //抵抗を増やす
-        rbPlayer.drag = 5;
+        rbPlayer.drag = 1;
     }
 
     void DownwardForce()
