@@ -52,7 +52,7 @@ public class EnemyController : MoveController
         {
             rbEnemy.velocity = Vector3.up * jump * 0.5f;
             rbEnemy.angularVelocity = new Vector3(270f, enemyTr.localEulerAngles.y, enemyTr.localEulerAngles.z);
-            Debug.Log(enemyTr.localEulerAngles.y);
+            //Debug.Log(enemyTr.localEulerAngles.y);
         }
         else if (Mathf.Floor(playerTr.transform.position.y) < Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
@@ -71,7 +71,7 @@ public class EnemyController : MoveController
         else// if(Mathf.Floor(playerTr.transform.position.y) <= Mathf.Floor(enemyTr.transform.position.y))
         {
             //Player‚ÌˆÊ’u‚ðŽæ“¾‚µ‚Ä‚»‚Ì•ûŒü‚Éi‚Þ
-            transform.position =
+            rbEnemy.position =
             Vector3.MoveTowards(transform.position,
             new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
             speed * Time.deltaTime);

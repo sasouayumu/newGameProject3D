@@ -40,34 +40,40 @@ public class MousePlayerController : MoveController
         animator = GetComponent<Animator>();
         GameObject enemyObj = GameObject.Find("Enemy");
         EnemyController = enemyObj.GetComponent<EnemyController>();
-        
     }
 
     // Update is called once per frame
     void Update()
     {
         inputV = Input.GetAxisRaw("Vertical");
-    }
-
-    void FixedUpdate()
-    {
-        //カメラの方向からX-Z平面の単位ベクトルを取得
-        Vector3 cameraFoward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
-
-        if (Input.GetKeyDown("w"))
+        //スペースでジャンプ
+        if (Input.GetKey(KeyCode.Space) && jump)
         {
-            StartCoroutine("WkeyDown");
+            animator.Play("Jump", 0, 0);//ジャンプのモーション
+            rbPlayer.velocity = Vector3.up * jumpForce;
         }
-        
-        //方向キーの入力値とカメラの向きから、移動方向を決定
-        //+Camera.main.transform.right * inputV
-        Vector3 moveFoward = cameraFoward;
+        //
+        if (Input.GetKeyDown(KeyCode.W)&&wallTouch)
+        {
+            animator.Play("Jump", 0, 0);//ジャンプのモーション
+            rbPlayer.velocity = Vector3.up * 7;
+            CameraController.InversionCamera();
+            //一度だけ敵に壁に当たった位置を送る
+            if (!EnemyController.GetSetwallKick)
+            {
+                EnemyController.wallTouchPos = transform.position;
+            }
+            EnemyController.GetSetwallKick = true;
+        }
+        else
+        {
+            wkey = false;
+        }
 
         //右クリックで走るようにする（Playerの移動速度を上げる）空中ではジャンプできないようにする
         if (Input.GetMouseButton(1) && dush && jump)
         {
             moveSpeed = 15;
-            //GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
             if (coroutine)
             {
                 coroutine = false;
@@ -77,20 +83,28 @@ public class MousePlayerController : MoveController
         else
         {
             //一定時間走ったら速度をもとに戻す
-            //GetComponent<Renderer>().material.color = UnityEngine.Color.red;
-            if (!coroutine&&coroutine2)
+            if (!coroutine && coroutine2)
             {
                 dush = false;
                 coroutine = true;
                 coroutine2 = false;
-                
+
                 StopCoroutine("DushCotroller");
                 StartCoroutine("DushStop");
             }
-            
+
             moveSpeed = 8;
         }
-       
+    }
+
+    void FixedUpdate()
+    {
+        //カメラの方向からX-Z平面の単位ベクトルを取得
+        Vector3 cameraFoward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+
+        //方向キーの入力値とカメラの向きから、移動方向を決定
+        Vector3 moveFoward = cameraFoward;
+
         //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
         rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
 
@@ -99,21 +113,8 @@ public class MousePlayerController : MoveController
         {
             transform.rotation = Quaternion.LookRotation(moveFoward*Time.deltaTime);
         }
-        //}
-
-        //スペースでジャンプ
-        if (Input.GetKey(KeyCode.Space) && jump)
-        {
-            animator.Play("Jump",0,0);//ジャンプのモーション
-            rbPlayer.velocity = Vector3.up * jumpForce;
-        }
     }
-    private IEnumerator WkeyDown()
-    {
-        wkey = true;
-        yield return new WaitForSeconds(0.1f);
-        wkey = false;
-    }
+    
     //走るのをやめたら一定時間走れないようにする
     private IEnumerator DushCotroller()
     {
@@ -142,39 +143,15 @@ public class MousePlayerController : MoveController
     }
 
     private void OnCollisionEnter(Collision collision)
-    {
-        //カギの入手
-        if (collision.gameObject.CompareTag("Key"))
-        {
-            key = true;
-        }
-
-        //カギを持っていたらゴールできるようにする
-        if (collision.gameObject.CompareTag("Goal") && key)
-        {
-            SceneManager.LoadScene(2);
-        }
-
+    { 
         if (collision.gameObject.CompareTag("Wall"))
         {
+            wallTouch = true;
             UpwardForce();
-            if (wkey)
-            {
-                animator.Play("Jump", 0, 0);//ジャンプのモーション
-                rbPlayer.velocity = Vector3.up * 7;
-                CameraController.InversionCamera();
-                //一度だけ敵に壁に当たった位置を送る
-                if (!EnemyController.GetSetwallKick)
-                {
-                    EnemyController.wallTouchPos = transform.position;
-                }
-                EnemyController.GetSetwallKick = true;
-                wkey = false;
-            }
         }
         else
         {
-            //Playerが地面にいる間はEnemyは壁キックする処理をしないようにする
+            //Playerが地面にいる間はEnemyは壁にいる時の処理をしないようにする
             EnemyController.GetSetwallKick = false;
         }
     }
@@ -185,6 +162,7 @@ public class MousePlayerController : MoveController
         if (collision.gameObject.CompareTag("Wall"))
         {
             DownwardForce();
+            wallTouch = false;
         }
 
         if (collision.gameObject.CompareTag("floor")|| collision.gameObject.CompareTag("Stand"))
@@ -193,6 +171,21 @@ public class MousePlayerController : MoveController
         }
     }
 
+    private void WallKick()
+    {
+        if (wallTouch)
+        {
+            animator.Play("Jump", 0, 0);//ジャンプのモーション
+            rbPlayer.velocity = Vector3.up * 7;
+            CameraController.InversionCamera();
+            //一度だけ敵に壁に当たった位置を送る
+            if (!EnemyController.GetSetwallKick)
+            {
+                EnemyController.wallTouchPos = transform.position;
+            }
+            EnemyController.GetSetwallKick = true;
+        }
+    }
     //壁に当たっている間、落ちる速度を落とす
     void UpwardForce()
     {

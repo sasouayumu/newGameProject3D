@@ -5,24 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class GameClear : MonoBehaviour
 {
-    public bool key = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private static bool key = false;
 
     private void OnCollisionEnter(Collision collision)
     {
-        
-
-        
         if (collision.gameObject.CompareTag("Player") && key)
         {
             SceneManager.LoadScene(2);
@@ -30,6 +16,7 @@ public class GameClear : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Player") && this.gameObject.CompareTag("Key"))
         {
+            key = true;
             Destroy(this.gameObject);
         }
     }
