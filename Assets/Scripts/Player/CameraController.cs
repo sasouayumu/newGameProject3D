@@ -7,7 +7,8 @@ public class CameraController : MonoBehaviour
 {
     private GameObject targetObj;//カメラが追従するオブジェクト
     private GameObject enemyObj;//Enemyオブジェクト
-    public GameObject SecondCamera;
+    [SerializeField]
+    private GameObject SecondCamera;
     private Vector3 targetPos;//追従するオブジェクトの場所
     private bool inversion = true; //カメラ反転
     

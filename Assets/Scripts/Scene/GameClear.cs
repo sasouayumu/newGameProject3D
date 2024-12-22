@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class GameClear : MonoBehaviour
 {
     private static bool key = false;
+    [SerializeField]
+    private GameObject getKeyUI;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -17,6 +19,7 @@ public class GameClear : MonoBehaviour
         if (collision.gameObject.CompareTag("Player") && this.gameObject.CompareTag("Key"))
         {
             key = true;
+            getKeyUI.SetActive(true);
             Destroy(this.gameObject);
         }
     }

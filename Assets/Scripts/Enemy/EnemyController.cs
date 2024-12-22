@@ -45,7 +45,6 @@ public class EnemyController : MoveController
         if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)
         {
             rbEnemy.velocity = Vector3.up * jump;
-            floor = false;
         }
         //Playerが上にいて壁にくっついているなら壁を上る
         else if (Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
@@ -62,13 +61,13 @@ public class EnemyController : MoveController
                  new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
                  speed * Time.deltaTime * 2);
         }
-        else if (GetSetwallKick && transform.position != SetGetwallTouchPos)
+        else if (GetSetwallKick && transform.position != SetGetwallTouchPos&&!wall)
         {
             //Playerが壁キックしている間はPlayerが壁に当たった場所へ進むようにする
             transform.position =
                Vector3.MoveTowards(transform.position, SetGetwallTouchPos, speed * Time.deltaTime);
         }
-        else// if(Mathf.Floor(playerTr.transform.position.y) <= Mathf.Floor(enemyTr.transform.position.y))
+        else
         {
             //Playerの位置を取得してその方向に進む
             rbEnemy.position =
@@ -115,5 +114,13 @@ public class EnemyController : MoveController
             wall = false;
         }
     }
-   
+    private void OnCollisionExit(Collision collision)
+    {
+        //段差に当たったらジャンプできるようにする
+        if (collision.gameObject.CompareTag("Stand") || collision.gameObject.CompareTag("floor"))
+        {
+            floor = false;
+        }
+    }
+
 }

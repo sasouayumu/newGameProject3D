@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MousePlayerController : MoveController
 {
@@ -13,6 +14,7 @@ public class MousePlayerController : MoveController
     private float moveSpeed = 8f;//移動速度
     private float inputV;
     private float jumpForce = 6f;//ジャンプ力
+    private float dushGauge = 3f;
     //ジャンプや走る処理の判定
     public  bool jump = true;
     private bool dush = true;
@@ -28,10 +30,12 @@ public class MousePlayerController : MoveController
     private Vector3 velocity;
     //PlayerのRigidbody
     private　Rigidbody rbPlayer;
-    //public Rigidbody rbWallKick { get { return rbPlayer; } set{ rbPlayer = GetComponent<Rigidbody>(); } }//引き渡し用
     private Animator animator;
     private EnemyController EnemyController;
-    public CameraController CameraController;
+    [SerializeField]
+    private CameraController CameraController;
+    [SerializeField]
+    private Slider dushGaugeSlider;
     
     
     void Start()
@@ -40,6 +44,7 @@ public class MousePlayerController : MoveController
         animator = GetComponent<Animator>();
         GameObject enemyObj = GameObject.Find("Enemy");
         EnemyController = enemyObj.GetComponent<EnemyController>();
+        dushGaugeSlider.value = 3f;
     }
 
     // Update is called once per frame
@@ -52,7 +57,7 @@ public class MousePlayerController : MoveController
             animator.Play("Jump", 0, 0);//ジャンプのモーション
             rbPlayer.velocity = Vector3.up * jumpForce;
         }
-        //
+        //壁キックの処理
         if (Input.GetKeyDown(KeyCode.W)&&wallTouch)
         {
             animator.Play("Jump", 0, 0);//ジャンプのモーション
@@ -69,11 +74,12 @@ public class MousePlayerController : MoveController
         {
             wkey = false;
         }
-
-        //右クリックで走るようにする（Playerの移動速度を上げる）空中ではジャンプできないようにする
+        
+        //右クリックで走るようにする（Playerの移動速度を上げる）空中では走るれないようにする
         if (Input.GetMouseButton(1) && dush && jump)
         {
             moveSpeed = 15;
+            
             if (coroutine)
             {
                 coroutine = false;
@@ -95,6 +101,7 @@ public class MousePlayerController : MoveController
 
             moveSpeed = 8;
         }
+        
     }
 
     void FixedUpdate()
@@ -118,16 +125,24 @@ public class MousePlayerController : MoveController
     //走るのをやめたら一定時間走れないようにする
     private IEnumerator DushCotroller()
     {
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(1.0f);
+        dushGaugeSlider.value -= 1f;
+        yield return new WaitForSeconds(1.0f);
+        dushGaugeSlider.value -= 1f;
+        yield return new WaitForSeconds(1.0f);
+        dushGaugeSlider.value -= 1f;
         dush = false;
-        
-        StartCoroutine("DushStop");
     }
 
     private IEnumerator DushStop()
     {
-        yield return new WaitForSeconds(3.0f);
-        
+        int gauge = 3-(int)dushGaugeSlider.value;
+        for (int i = gauge; i >= 0; i--)
+        {
+            yield return new WaitForSeconds(1.0f);
+            dushGaugeSlider.value += 1f;
+        }
+
         coroutine2 = true;
         dush = true;
     }
