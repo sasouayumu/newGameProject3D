@@ -13,7 +13,7 @@ public class EnemyController : MoveController
     public Vector3 wallTouchPos;
     public Vector3 SetGetwallTouchPos { get { return wallTouchPos; } set { wallTouchPos = value; } }
     private Vector3 prevPos;//回転用のプライベート座標
-    [SerializeField] float speed = 1f;//移動速度
+    [SerializeField] float speed;//移動速度
     private float jump = 5f;//ジャンプの強さ
     private Rigidbody rbEnemy;//敵のRigidbody情報
     //当たり判定用
@@ -23,7 +23,7 @@ public class EnemyController : MoveController
     public  bool CheckWallKick;
     public bool GetSetwallKick { get { return CheckWallKick; } set { CheckWallKick = value; } }
     MousePlayerController mpc;
-    // Start is called before the first frame update
+    
     void Start()
     {
         //Playerの位置とEnemyの位置を取得する
@@ -38,20 +38,18 @@ public class EnemyController : MoveController
         
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         //Playerが高い場所に行き、FloorがTrueならジャンプする
         if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)
         {
             rbEnemy.velocity = Vector3.up * jump;
+            
         }
         //Playerが上にいて壁にくっついているなら壁を上る
-        else if (Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
+        else if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
-            rbEnemy.velocity = Vector3.up * jump * 0.5f;
-            rbEnemy.angularVelocity = new Vector3(270f, enemyTr.localEulerAngles.y, enemyTr.localEulerAngles.z);
-            //Debug.Log(enemyTr.localEulerAngles.y);
+            rbEnemy.velocity = Vector3.up * jump * 0.6f;
         }
         else if (Mathf.Floor(playerTr.transform.position.y) < Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
@@ -60,17 +58,19 @@ public class EnemyController : MoveController
                  Vector3.MoveTowards(transform.position,
                  new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
                  speed * Time.deltaTime * 2);
+            
         }
         else if (GetSetwallKick && transform.position != SetGetwallTouchPos&&!wall)
         {
             //Playerが壁キックしている間はPlayerが壁に当たった場所へ進むようにする
             transform.position =
                Vector3.MoveTowards(transform.position, SetGetwallTouchPos, speed * Time.deltaTime);
+            
         }
         else
         {
             //Playerの位置を取得してその方向に進む
-            rbEnemy.position =
+            transform.position =
             Vector3.MoveTowards(transform.position,
             new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
             speed * Time.deltaTime);

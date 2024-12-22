@@ -76,7 +76,7 @@ public class MousePlayerController : MoveController
         }
         
         //右クリックで走るようにする（Playerの移動速度を上げる）空中では走るれないようにする
-        if (Input.GetMouseButton(1) && dush && jump)
+        if (Input.GetMouseButton(1) && dush && jump&&dushGaugeSlider.value > 0)
         {
             moveSpeed = 15;
             
