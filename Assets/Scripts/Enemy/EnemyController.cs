@@ -39,7 +39,7 @@ public class EnemyController : MoveController
     }
 
     void FixedUpdate()
-    {
+    { 
         //Playerが高い場所に行き、FloorがTrueならジャンプする
         if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)
         {
@@ -49,7 +49,9 @@ public class EnemyController : MoveController
         //Playerが上にいて壁にくっついているなら壁を上る
         else if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
-            rbEnemy.velocity = Vector3.up * jump * 0.6f;
+            rbEnemy.velocity = Vector3.up * jump * 0.5f;
+            rbEnemy.transform.eulerAngles=new Vector3(-90,transform.localEulerAngles.y,transform.localEulerAngles.z);
+           
         }
         else if (Mathf.Floor(playerTr.transform.position.y) < Mathf.Floor(enemyTr.transform.position.y) && wall)
         {

@@ -26,6 +26,7 @@ public class MousePlayerController : MoveController
     //壁の当たり判定
     private bool wallTouch;
     public bool wallTouchgs { get { return wallTouch; } set { wallTouch = false; } }
+    private bool jumpStand;
     //Player移動用の座標
     private Vector3 velocity;
     //PlayerのRigidbody
@@ -55,7 +56,16 @@ public class MousePlayerController : MoveController
         if (Input.GetKey(KeyCode.Space) && jump)
         {
             animator.Play("Jump", 0, 0);//ジャンプのモーション
-            rbPlayer.velocity = Vector3.up * jumpForce;
+            //ジャンプ台に乗っているなら高くジャンプ
+            if (jumpStand)
+            {
+                rbPlayer.velocity = Vector3.up * jumpForce*2;
+            }
+            else
+            {
+                rbPlayer.velocity = Vector3.up * jumpForce;
+            }
+            
         }
         //壁キックの処理
         if (Input.GetKeyDown(KeyCode.W)&&wallTouch)
@@ -150,7 +160,7 @@ public class MousePlayerController : MoveController
     private void OnCollisionStay(Collision collision)
     {
         //二段ジャンプできないようにする（着地でジャンプできるようにする）
-        if (collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("Stand"))
+        if (collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("Stand")||collision.gameObject.CompareTag("JumpStand"))
         {
             jump = true;
             animator.Play("Idle");//着地したら走るモーションに戻す
@@ -169,6 +179,11 @@ public class MousePlayerController : MoveController
             //Playerが地面にいる間はEnemyは壁にいる時の処理をしないようにする
             EnemyController.GetSetwallKick = false;
         }
+        //ジャンプ台の当たり判定
+        if (collision.gameObject.CompareTag("JumpStand"))
+        {
+            jumpStand = true;
+        }
     }
 
     private void OnCollisionExit(Collision collision)
@@ -180,27 +195,17 @@ public class MousePlayerController : MoveController
             wallTouch = false;
         }
 
-        if (collision.gameObject.CompareTag("floor")|| collision.gameObject.CompareTag("Stand"))
+        if (collision.gameObject.CompareTag("floor")|| collision.gameObject.CompareTag("Stand") || collision.gameObject.CompareTag("JumpStand"))
         {
             jump = false;
         }
-    }
 
-    private void WallKick()
-    {
-        if (wallTouch)
+        if (collision.gameObject.CompareTag("JumpStand"))
         {
-            animator.Play("Jump", 0, 0);//ジャンプのモーション
-            rbPlayer.velocity = Vector3.up * 7;
-            CameraController.InversionCamera();
-            //一度だけ敵に壁に当たった位置を送る
-            if (!EnemyController.GetSetwallKick)
-            {
-                EnemyController.wallTouchPos = transform.position;
-            }
-            EnemyController.GetSetwallKick = true;
+            jumpStand = false;
         }
     }
+
     //壁に当たっている間、落ちる速度を落とす
     void UpwardForce()
     {

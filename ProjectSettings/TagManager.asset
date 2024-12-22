@@ -11,6 +11,7 @@ TagManager:
   - Goal
   - Wall
   - SecondCamera
+  - JumpStand
   layers:
   - Default
   - TransparentFX
