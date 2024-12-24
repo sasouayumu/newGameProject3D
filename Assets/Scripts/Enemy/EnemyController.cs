@@ -39,19 +39,41 @@ public class EnemyController : MoveController
     }
 
     void FixedUpdate()
-    { 
+    {
+        int upRotation = 0;//通常時はY軸を０に固定する
+        int wallRotation_x = 0;//壁に登るときの角度
+        
         //Playerが高い場所に行き、FloorがTrueならジャンプする
         if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)
         {
             rbEnemy.velocity = Vector3.up * jump;
-            
         }
-        //Playerが上にいて壁にくっついているなら壁を上る
+        //Playerが上にいて壁にくっついているなら壁を登る
         else if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
             rbEnemy.velocity = Vector3.up * jump * 0.5f;
-            rbEnemy.transform.eulerAngles=new Vector3(-90,transform.localEulerAngles.y,transform.localEulerAngles.z);
-           
+            upRotation = 270;//壁を登るときは上を向くようにする
+            //向いている方向によって壁に向く方向を変える
+            if ((trans.localEulerAngles.y >= 271f||trans.localEulerAngles.y >= -91f)&&trans.localEulerAngles.y <= 45f)
+            {
+                wallRotation_x = 0;
+               //Debug.Log("mae");
+            }
+            else if (trans.localEulerAngles.y >= 46f && trans.localEulerAngles.y <= 90f)
+            {
+                wallRotation_x = 90;
+                //Debug.Log("migi");
+            }
+            else if (trans.localEulerAngles.y >= 91f && trans.localEulerAngles.y <= 180f)
+            {
+                wallRotation_x = 180;
+                //Debug.Log("usiro");
+            }
+            else if (trans.localEulerAngles.y >= 181f && (trans.localEulerAngles.y <= 270f||trans.localEulerAngles.y <=-90f))
+            {
+                wallRotation_x = 270;
+                //Debug.Log("hidari");
+            }
         }
         else if (Mathf.Floor(playerTr.transform.position.y) < Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
@@ -77,7 +99,7 @@ public class EnemyController : MoveController
             new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
             speed * Time.deltaTime);
         }
-        //Playerと同じ方向を向くようにする処理
+        //Playerの方向を向くようにする処理
         //現在フレームのワールド位置
         var pos = trans.position;
 
@@ -92,7 +114,15 @@ public class EnemyController : MoveController
             return;
         
         //進行方向に向くようにクォータニオンを取得
-        var rotation = Quaternion.LookRotation(delta, Vector3.up);
+        Quaternion rotation = Quaternion.LookRotation(new Vector3(delta.x, upRotation, delta.z), Vector3.up);
+
+        if (wall)//壁に上るとき壁の方に向く
+        {
+            rotation = Quaternion.LookRotation(new Vector3(wallRotation_x, upRotation,0),Vector3.up);
+        }else if (!floor)//ジャンプするときに上を向けるようにする
+        {
+            rotation = Quaternion.LookRotation(delta, Vector3.up);
+        }
 
         //オブジェクトに反映
         trans.rotation = rotation;
