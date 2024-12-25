@@ -14,4 +14,9 @@ public class GameOver : MonoBehaviour
             SceneManager.LoadScene(1);
         }
     }
+
+    public void Retry()
+    {
+        SceneManager.LoadScene(sceneName);
+    }
 }

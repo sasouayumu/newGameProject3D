@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class ButtonController : MonoBehaviour
 {
-    Pause pause;
+    private Pause pause;
     public void Title()
     {
         SceneManager.LoadScene(3);
@@ -20,6 +20,21 @@ public class ButtonController : MonoBehaviour
     public void Play()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void Next()
+    {
+
+    }
+
+    public void Tutorial()
+    {
+
+    }
+
+    public void Setting()
+    {
+
     }
 
     public void Exit()

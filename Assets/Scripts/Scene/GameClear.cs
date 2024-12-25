@@ -9,10 +9,13 @@ public class GameClear : MonoBehaviour
     [SerializeField]
     private GameObject getKeyUI;
 
+    int sceneNumber;
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") && key)
+        if (collision.gameObject.CompareTag("Player") && key && this.gameObject.CompareTag("Goal"))
         {
+            key = false;
+            sceneNumber = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(2);
         }
 
@@ -22,5 +25,10 @@ public class GameClear : MonoBehaviour
             getKeyUI.SetActive(true);
             Destroy(this.gameObject);
         }
+    }
+
+    public void Next()
+    {
+        SceneManager.LoadScene(sceneNumber+1);
     }
 }
