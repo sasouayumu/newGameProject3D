@@ -5,12 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour
 {
-
+    public static string sceneName;
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-           // SceneManager.LoadScene(1);
+            sceneName = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(1);
         }
     }
 }

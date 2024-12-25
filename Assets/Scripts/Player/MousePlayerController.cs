@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MousePlayerController : MoveController
+public class MousePlayerController : MonoBehaviour
 {
     private int moveInversion = 1;//後ろを向くときに移動方向をそのままにする
     private float moveSpeed = 8f;//移動速度
@@ -51,6 +51,11 @@ public class MousePlayerController : MoveController
     // Update is called once per frame
     void Update()
     {
+        if (Mathf.Approximately(Time.timeScale, 0f))
+        {
+            return;
+        }
+
         inputV = Input.GetAxisRaw("Vertical");
         //スペースでジャンプ
         if (Input.GetKey(KeyCode.Space) && jump)

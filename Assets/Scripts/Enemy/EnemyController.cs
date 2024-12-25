@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyController : MoveController
+public class EnemyController : MonoBehaviour
 {
     private GameObject player;
     private Transform playerTr;//PlayerÇÃç¿ïW

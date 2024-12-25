@@ -24,6 +24,10 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Mathf.Approximately(Time.timeScale,0f))
+        {
+            return;
+        }
         //ターゲットの移動分、移動する
         transform.position += targetObj.transform.position - targetPos;
         targetPos = targetObj.transform.position;
