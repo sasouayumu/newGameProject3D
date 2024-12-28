@@ -8,16 +8,22 @@ public class MoveFloorController : MonoBehaviour
     Rigidbody rigidBody = null;
 
     [SerializeField]
-    Vector3 speed = new Vector3(1f,1f,1f);
+    Vector3 speed = Vector3.zero;
 
     List<Rigidbody> rigidBodies = new();
 
+    private Vector3 floorPos;
+    private bool floorMove;
+    void Start()
+    {
+        floorPos = transform.position;
+
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
         MoveFloor();
         AddVelocity();
-        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -32,7 +38,23 @@ public class MoveFloorController : MonoBehaviour
 
     void MoveFloor()
     {
-        rigidBody.MovePosition(transform.position + Time.deltaTime * speed);
+        if (transform.position == floorPos)
+        {
+            floorMove = true;
+        }
+        else if (transform.position == floorPos +new Vector3(5f, 0, 0))
+        {
+            floorMove = false;
+        }
+
+        if (floorMove)
+        {
+            rigidBody.MovePosition(transform.position + Time.deltaTime * speed);
+        }
+        else
+        {
+            rigidBody.MovePosition(transform.position - Time.deltaTime * speed);
+        }
     }
 
     void AddVelocity()

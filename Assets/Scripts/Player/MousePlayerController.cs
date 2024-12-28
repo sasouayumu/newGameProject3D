@@ -23,14 +23,20 @@ public class MousePlayerController : MonoBehaviour
     private bool move = true;
     private bool key = false;
     private bool wkey = false;
+    private bool poleTouch = false;
+    private bool spinning = false;
     //壁の当たり判定
     private bool wallTouch;
     public bool wallTouchgs { get { return wallTouch; } set { wallTouch = false; } }
     private bool jumpStand;
     //Player移動用の座標
     private Vector3 velocity;
+    //ポール回転用
+    [SerializeField] private Transform poleTarget;
+    [SerializeField] private float spinSpeed = 10f;
+    [SerializeField] private float radius = 0.5f;
     //PlayerのRigidbody
-    private　Rigidbody rbPlayer;
+    private Rigidbody rbPlayer;
     private Animator animator;
     private EnemyController EnemyController;
     [SerializeField]
@@ -89,7 +95,17 @@ public class MousePlayerController : MonoBehaviour
         {
             wkey = false;
         }
-        
+        //ポール回転の処理
+        if (Input.GetKey(KeyCode.S)&&poleTouch)
+        {
+            
+            Debug.Log(poleTarget.position);
+            spinning = true;
+            transform.RotateAround(poleTarget.position,transform.up,spinSpeed);
+            //rbPlayer.velocity = Vector3.up * jumpForce;
+            spinning = false;
+        }
+        Debug.Log(poleTouch);
         //右クリックで走るようにする（Playerの移動速度を上げる）空中では走るれないようにする
         if (Input.GetMouseButton(1) && dush && jump&&dushGaugeSlider.value > 0)
         {
@@ -125,9 +141,12 @@ public class MousePlayerController : MonoBehaviour
 
         //方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveFoward = cameraFoward;
+        if (!spinning)
+        {
+            //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
+            //rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
 
-        //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-        rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
+        }
 
         //キャラクターの向きを進行方向に
         if (moveFoward != Vector3.zero)
@@ -207,6 +226,24 @@ public class MousePlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("JumpStand"))
         {
             jumpStand = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Stand"))
+        {
+            poleTarget =other.transform;
+           
+            poleTouch = true ;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Stand"))
+        {
+            poleTouch = false;
         }
     }
 
