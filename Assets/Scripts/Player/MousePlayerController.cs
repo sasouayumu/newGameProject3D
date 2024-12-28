@@ -116,7 +116,6 @@ public class MousePlayerController : MonoBehaviour
 
             moveSpeed = 8;
         }
-        
     }
 
     void FixedUpdate()
