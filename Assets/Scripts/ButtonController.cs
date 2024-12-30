@@ -24,17 +24,17 @@ public class ButtonController : MonoBehaviour
 
     public void Next()
     {
-
+        SceneManager.LoadScene(0);
     }
 
     public void Tutorial()
     {
-
+        SceneManager.LoadScene(4);
     }
 
     public void Setting()
     {
-
+        SceneManager.LoadScene(5);
     }
 
     public void Exit()

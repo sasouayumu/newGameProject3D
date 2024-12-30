@@ -16,7 +16,15 @@ public class GameClear : MonoBehaviour
         {
             key = false;
             sceneNumber = SceneManager.GetActiveScene().buildIndex;
-            SceneManager.LoadScene(2);
+            if(sceneNumber == 5)
+            {
+                SceneManager.LoadScene(3);
+            }
+            else
+            {
+                SceneManager.LoadScene(2);
+            }
+           
         }
 
         if (collision.gameObject.CompareTag("Player") && this.gameObject.CompareTag("Key"))

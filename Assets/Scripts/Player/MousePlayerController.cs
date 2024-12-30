@@ -29,12 +29,15 @@ public class MousePlayerController : MonoBehaviour
     private bool wallTouch;
     public bool wallTouchgs { get { return wallTouch; } set { wallTouch = false; } }
     private bool jumpStand;
+    private bool aKey = true;
+    private bool dKey = true;
+    private bool upWall = false;
     //Player移動用の座標
     private Vector3 velocity;
-    //ポール回転用
+    //ポールジャンプ用
     [SerializeField] private Transform poleTarget;
-    [SerializeField] private float spinSpeed = 10f;
-    [SerializeField] private float radius = 0.5f;
+    [SerializeField] private float spinSpeed =5f;
+    
     //PlayerのRigidbody
     private Rigidbody rbPlayer;
     private Animator animator;
@@ -76,8 +79,29 @@ public class MousePlayerController : MonoBehaviour
             {
                 rbPlayer.velocity = Vector3.up * jumpForce;
             }
-            
         }
+
+        
+        if(Input.GetKeyDown(KeyCode.A)&&aKey&&wallTouch)
+        {
+            aKey = false;
+            dKey = true;
+            upWall = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.D) && dKey && wallTouch)
+        {
+            aKey=true; 
+            dKey = false;
+            upWall = true;
+        }
+
+        if (upWall)
+        {
+            transform.position += new Vector3(0,0.5f,0);
+            upWall = false;   
+        }
+
         //壁キックの処理
         if (Input.GetKeyDown(KeyCode.W)&&wallTouch)
         {
@@ -95,17 +119,16 @@ public class MousePlayerController : MonoBehaviour
         {
             wkey = false;
         }
-        //ポール回転の処理
+        //ポールジャンプの処理
         if (Input.GetKey(KeyCode.S)&&poleTouch)
         {
-            
-            Debug.Log(poleTarget.position);
+            animator.Play("Jump", 0, 0);//ジャンプのモーション
             spinning = true;
-            transform.RotateAround(poleTarget.position,transform.up,spinSpeed);
-            //rbPlayer.velocity = Vector3.up * jumpForce;
+            transform.RotateAround(poleTarget.position,-transform.right,spinSpeed);
+            rbPlayer.velocity = Vector3.up * jumpForce;
             spinning = false;
         }
-        Debug.Log(poleTouch);
+        
         //右クリックで走るようにする（Playerの移動速度を上げる）空中では走るれないようにする
         if (Input.GetMouseButton(1) && dush && jump&&dushGaugeSlider.value > 0)
         {
@@ -141,12 +164,12 @@ public class MousePlayerController : MonoBehaviour
 
         //方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveFoward = cameraFoward;
-        if (!spinning)
-        {
+        //if (!spinning)
+        //{
             //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-            //rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
+             rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
 
-        }
+        //}
 
         //キャラクターの向きを進行方向に
         if (moveFoward != Vector3.zero)
@@ -216,9 +239,12 @@ public class MousePlayerController : MonoBehaviour
         {
             DownwardForce();
             wallTouch = false;
+            aKey = true;
+            dKey = true;
+            upWall = false;
         }
 
-        if (collision.gameObject.CompareTag("floor")|| collision.gameObject.CompareTag("Stand") || collision.gameObject.CompareTag("JumpStand"))
+        if (collision.gameObject.CompareTag("floor")||collision.gameObject.CompareTag("JumpStand"))
         {
             jump = false;
         }
