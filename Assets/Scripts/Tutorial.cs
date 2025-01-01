@@ -15,7 +15,7 @@ public class Tutorial : MonoBehaviour
     {
         if (this.gameObject.CompareTag("TutorialCamera"))
         {
-            tutorialText.text = "左クリックを押しながらマウスを動かすことでカメラを左右に動かせます。";
+            tutorialText.text = "プレイヤーはカメラの見ている方向に進み続けます。左クリックを押しながらマウスを動かすことでカメラを左右に動かせます。";
         }
 
         if (this.gameObject.CompareTag("TutorialSecondCamera"))
@@ -67,14 +67,10 @@ public class Tutorial : MonoBehaviour
         {
             tutorialText.text = "鍵を持って家のドアに行くとゲームクリアです。入手した鍵は左下の表示されます。";
         }
-        
-
     }
 
     private void OnTriggerExit(Collider other)
     {
-       
-
             tutorialText.text = "";
     }
 }

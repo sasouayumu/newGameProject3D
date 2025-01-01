@@ -7,7 +7,8 @@ public class ButtonController : MonoBehaviour
     private Pause pause;
     public void Title()
     {
-        SceneManager.LoadScene(3);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(8);
     }
 
     public void Restart()
@@ -19,12 +20,7 @@ public class ButtonController : MonoBehaviour
 
     public void Play()
     {
-        SceneManager.LoadScene(0);
-    }
-
-    public void Next()
-    {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(5);
     }
 
     public void Tutorial()
@@ -34,7 +30,7 @@ public class ButtonController : MonoBehaviour
 
     public void Setting()
     {
-        SceneManager.LoadScene(5);
+        SceneManager.LoadScene(3);
     }
 
     public void Exit()

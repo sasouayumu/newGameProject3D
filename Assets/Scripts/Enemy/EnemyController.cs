@@ -19,10 +19,12 @@ public class EnemyController : MonoBehaviour
     //当たり判定用
     private bool floor = false;
     private bool wall = false;
+    private bool stepJamp = false;
     //Playerの壁キックの当たり判定
     public  bool CheckWallKick;
     public bool GetSetwallKick { get { return CheckWallKick; } set { CheckWallKick = value; } }
     MousePlayerController mpc;
+    private int janpStand = 1;
     
     void Start()
     {
@@ -44,9 +46,9 @@ public class EnemyController : MonoBehaviour
         int wallRotation_x = 0;//壁に登るときの角度
         
         //Playerが高い場所に行き、FloorがTrueならジャンプする
-        if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)
+        if ((Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)||stepJamp)
         {
-            rbEnemy.velocity = Vector3.up * jump;
+            rbEnemy.velocity = Vector3.up * jump* janpStand;
         }
         //Playerが上にいて壁にくっついているなら壁を登る
         else if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
@@ -115,7 +117,7 @@ public class EnemyController : MonoBehaviour
         
         //進行方向に向くようにクォータニオンを取得
         Quaternion rotation = Quaternion.LookRotation(new Vector3(delta.x, upRotation, delta.z), Vector3.up);
-
+       
         if (wall)//壁に上るとき壁の方に向く
         {
             rotation = Quaternion.LookRotation(new Vector3(wallRotation_x, upRotation,0),Vector3.up);
@@ -129,13 +131,23 @@ public class EnemyController : MonoBehaviour
     }
 
     private void OnCollisionStay(Collision collision)
-    {
+    { 
         //段差に当たったらジャンプできるようにする
-        if (collision.gameObject.CompareTag("Stand")|| collision.gameObject.CompareTag("floor"))
+        if (collision.gameObject.CompareTag("floor"))
         {
             floor = true;
+            wall = false;
         }
 
+        if (collision.gameObject.CompareTag("JumpStand"))
+        {
+            janpStand = 2;
+        }
+
+        if (collision.gameObject.CompareTag("Step"))
+        {
+            stepJamp = true;
+        }
         //壁の当たり判定
         if (collision.gameObject.CompareTag("Wall"))
         {
@@ -149,9 +161,20 @@ public class EnemyController : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         //段差に当たったらジャンプできるようにする
-        if (collision.gameObject.CompareTag("Stand") || collision.gameObject.CompareTag("floor"))
+        if (collision.gameObject.CompareTag("Step") || collision.gameObject.CompareTag("floor"))
         {
             floor = false;
+        }
+
+
+        if (collision.gameObject.CompareTag("Step"))
+        {
+            stepJamp = false;
+        }
+
+        if (collision.gameObject.CompareTag("JumpStand"))
+        {
+            janpStand = 1;
         }
     }
 

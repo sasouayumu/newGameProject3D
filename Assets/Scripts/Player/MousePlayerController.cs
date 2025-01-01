@@ -46,7 +46,10 @@ public class MousePlayerController : MonoBehaviour
     private CameraController CameraController;
     [SerializeField]
     private Slider dushGaugeSlider;
-    
+    public AudioClip jampSE;
+    public AudioClip runSE;
+    public AudioClip upWallSE;
+    private AudioSource audioSource;
     
     void Start()
     {
@@ -55,6 +58,7 @@ public class MousePlayerController : MonoBehaviour
         GameObject enemyObj = GameObject.Find("Enemy");
         EnemyController = enemyObj.GetComponent<EnemyController>();
         dushGaugeSlider.value = 3f;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -69,6 +73,7 @@ public class MousePlayerController : MonoBehaviour
         //スペースでジャンプ
         if (Input.GetKey(KeyCode.Space) && jump)
         {
+            audioSource.PlayOneShot(jampSE);
             animator.Play("Jump", 0, 0);//ジャンプのモーション
             //ジャンプ台に乗っているなら高くジャンプ
             if (jumpStand)
@@ -91,13 +96,14 @@ public class MousePlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.D) && dKey && wallTouch)
         {
-            aKey=true; 
+            aKey =true; 
             dKey = false;
             upWall = true;
         }
 
         if (upWall)
         {
+            audioSource.PlayOneShot(upWallSE);
             transform.position += new Vector3(0,0.5f,0);
             upWall = false;   
         }
@@ -105,6 +111,7 @@ public class MousePlayerController : MonoBehaviour
         //壁キックの処理
         if (Input.GetKeyDown(KeyCode.W)&&wallTouch)
         {
+            audioSource.PlayOneShot(jampSE);
             animator.Play("Jump", 0, 0);//ジャンプのモーション
             rbPlayer.velocity = Vector3.up * 7;
             CameraController.InversionCamera();
@@ -122,6 +129,7 @@ public class MousePlayerController : MonoBehaviour
         //ポールジャンプの処理
         if (Input.GetKey(KeyCode.S)&&poleTouch)
         {
+            audioSource.PlayOneShot(jampSE);
             animator.Play("Jump", 0, 0);//ジャンプのモーション
             spinning = true;
             transform.RotateAround(poleTarget.position,-transform.right,spinSpeed);
@@ -136,6 +144,7 @@ public class MousePlayerController : MonoBehaviour
             
             if (coroutine)
             {
+                audioSource.PlayOneShot(runSE);
                 coroutine = false;
                 StartCoroutine("DushCotroller");
             }
@@ -192,6 +201,7 @@ public class MousePlayerController : MonoBehaviour
 
     private IEnumerator DushStop()
     {
+        audioSource.Stop();
         int gauge = 3-(int)dushGaugeSlider.value;
         for (int i = gauge; i >= 0; i--)
         {
@@ -206,9 +216,12 @@ public class MousePlayerController : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         //二段ジャンプできないようにする（着地でジャンプできるようにする）
-        if (collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("Stand")||collision.gameObject.CompareTag("JumpStand"))
+        if (collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("Step")||collision.gameObject.CompareTag("JumpStand"))
         {
             jump = true;
+            aKey = true;
+            dKey = true;
+            upWall = false;
             animator.Play("Idle");//着地したら走るモーションに戻す
         }
     }
@@ -239,9 +252,6 @@ public class MousePlayerController : MonoBehaviour
         {
             DownwardForce();
             wallTouch = false;
-            aKey = true;
-            dKey = true;
-            upWall = false;
         }
 
         if (collision.gameObject.CompareTag("floor")||collision.gameObject.CompareTag("JumpStand"))
@@ -257,7 +267,7 @@ public class MousePlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Stand"))
+        if (other.gameObject.CompareTag("Pole"))
         {
             poleTarget =other.transform;
            
@@ -267,7 +277,7 @@ public class MousePlayerController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Stand"))
+        if (other.gameObject.CompareTag("Pole"))
         {
             poleTouch = false;
         }
