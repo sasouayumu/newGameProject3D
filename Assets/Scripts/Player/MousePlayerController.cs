@@ -36,7 +36,7 @@ public class MousePlayerController : MonoBehaviour
     private Vector3 velocity;
     //ポールジャンプ用
     [SerializeField] private Transform poleTarget;
-    [SerializeField] private float spinSpeed =5f;
+    [SerializeField] private float spinSpeed =4f;
     
     //PlayerのRigidbody
     private Rigidbody rbPlayer;

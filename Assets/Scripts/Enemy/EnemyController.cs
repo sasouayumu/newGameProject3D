@@ -93,6 +93,11 @@ public class EnemyController : MonoBehaviour
                Vector3.MoveTowards(transform.position, SetGetwallTouchPos, speed * Time.deltaTime);
             
         }
+        else if (Mathf.Floor(playerTr.transform.position.y-enemyTr.transform.position.y)>10f)
+        {
+            //Playerがとても高い場所にいった場合、高くジャンプするようにする
+            rbEnemy.velocity = Vector3.up * 10;
+        }
         else
         {
             //Playerの位置を取得してその方向に進む
