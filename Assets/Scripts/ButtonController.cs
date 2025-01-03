@@ -8,7 +8,7 @@ public class ButtonController : MonoBehaviour
     public void Title()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(8);
+        SceneManager.LoadScene("TitleScene");
     }
 
     public void Restart()
@@ -20,7 +20,7 @@ public class ButtonController : MonoBehaviour
 
     public void Play()
     {
-        SceneManager.LoadScene(5);
+        SceneManager.LoadScene("Stage1");
     }
 
     public void Tutorial()
@@ -33,6 +33,10 @@ public class ButtonController : MonoBehaviour
         SceneManager.LoadScene(3);
     }
 
+    public void Cregits()
+    {
+        SceneManager.LoadScene(5);
+    }
     public void Exit()
     {
         #if UNITY_EDITOR

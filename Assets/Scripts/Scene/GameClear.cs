@@ -41,7 +41,7 @@ public class GameClear : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         if (sceneNumber == 4)
         {
-            SceneManager.LoadScene(8);
+            SceneManager.LoadScene("TitleScene");
         }
         else
         {
