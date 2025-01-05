@@ -8,9 +8,9 @@ public class GameClear : MonoBehaviour
     private static bool key = false;
     [SerializeField]
     private GameObject getKeyUI;
-    public AudioClip getKeySE;
-    public AudioClip goalSE;
-    private static AudioSource audioSource;
+    [SerializeField]public AudioClip getKeySE;
+    [SerializeField] public AudioClip goalSE;
+    private  AudioSource audioSource;
     static int sceneNumber;
 
     private void Start()
@@ -19,6 +19,7 @@ public class GameClear : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        //鍵を持ってゴールに行ったらゲームクリアシーンに進む
         if (collision.gameObject.CompareTag("Player") && key && this.gameObject.CompareTag("Goal"))
         {
             audioSource.PlayOneShot(goalSE);
@@ -27,6 +28,7 @@ public class GameClear : MonoBehaviour
             StartCoroutine("Goal");
         }
 
+        //鍵に当たったらkeyをTrueにする
         if (collision.gameObject.CompareTag("Player") && this.gameObject.CompareTag("Key"))
         {
             key = true;
@@ -38,7 +40,11 @@ public class GameClear : MonoBehaviour
 
     IEnumerator Goal()
     {
-        yield return new WaitForSeconds(0.1f);
+        //SEを鳴らしてからシーン移動させる
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(0.5f);
+        Time.timeScale = 1f;
+        //チュートリアルならタイトルに普通のステージならクリア画面に移動する
         if (sceneNumber == 4)
         {
             SceneManager.LoadScene("TitleScene");
@@ -50,6 +56,15 @@ public class GameClear : MonoBehaviour
     }
     public void Next()
     {
-        SceneManager.LoadScene(sceneNumber+1);
+        //次のステージへ移動する最終ステージならタイトルへ戻る
+        if(sceneNumber == 8)
+        {
+            SceneManager.LoadScene("TitleScene");
+        }
+        else
+        {
+            SceneManager.LoadScene(sceneNumber + 1);
+        }
+       
     }
 }

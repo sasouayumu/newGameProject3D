@@ -86,7 +86,7 @@ public class MousePlayerController : MonoBehaviour
             }
         }
 
-        
+        //壁に当たりながらAkeyとDkeyを交互に押すことで壁に登れる
         if(Input.GetKeyDown(KeyCode.A)&&aKey&&wallTouch)
         {
             aKey = false;
@@ -216,7 +216,7 @@ public class MousePlayerController : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         //二段ジャンプできないようにする（着地でジャンプできるようにする）
-        if (collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("Step")||collision.gameObject.CompareTag("JumpStand"))
+        if (collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("JumpStand"))
         {
             jump = true;
             aKey = true;
@@ -265,6 +265,7 @@ public class MousePlayerController : MonoBehaviour
         }
     }
 
+    //ポールに当たった時の処理
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Pole"))
@@ -275,6 +276,7 @@ public class MousePlayerController : MonoBehaviour
         }
     }
 
+    //離れたら戻す
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Pole"))

@@ -1394,7 +1394,7 @@ AudioSource:
   m_GameObject: {fileID: 1111774631}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1929169959877585465, guid: f8df66fe56bcef24a97069edf2c048cd, type: 2}
   m_audioClip: {fileID: 8300000, guid: 574e6c77e215e2e4cb4aa5c4dc45dc07, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -1991,7 +1991,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u30AF\u30EC\u30B8\u30C3\u30C8\u8868\u8A18"
+  m_text: "\u30AF\u30EC\u30B8\u30C3\u30C8"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 002f197b9070a1c4cb980a7738c46fe4, type: 2}
   m_sharedMaterial: {fileID: 8171406452830357266, guid: 002f197b9070a1c4cb980a7738c46fe4, type: 2}
@@ -2165,8 +2165,8 @@ RectTransform:
   - {fileID: 869955901}
   - {fileID: 1309848042}
   - {fileID: 923236110}
-  - {fileID: 1313943109}
   - {fileID: 1213036006}
+  - {fileID: 1313943109}
   - {fileID: 99679927}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

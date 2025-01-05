@@ -35,7 +35,6 @@ public class CameraController : MonoBehaviour
         //マウスホイールボタンを押している間カメラを反対に移動する
         if (Input.GetMouseButtonDown(2) && inversion)
         {
-            //Debug.Log(MousePlayer.wallTouchgs);
             inversion = false;
             SecondCamera.gameObject.SetActive(true);
 
@@ -56,6 +55,7 @@ public class CameraController : MonoBehaviour
             transform.RotateAround(targetPos, Vector3.up, mouseInputX * 50f);
         }
     }
+    //カメラを反転させる
     public void InversionCamera()
     {
         transform.RotateAround(targetPos, Vector3.up, 180);

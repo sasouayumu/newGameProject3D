@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class ButtonController : MonoBehaviour
 {
     private Pause pause;
+    //Šeƒ{ƒ^ƒ“‚Ìˆ—
     public void Title()
     {
         Time.timeScale = 1f;

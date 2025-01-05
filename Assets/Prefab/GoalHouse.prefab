@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 3146132478011313468}
   - component: {fileID: 886568764319988214}
   - component: {fileID: 4119406270726180779}
+  - component: {fileID: 7631466481826684798}
   - component: {fileID: 4434039653298587698}
-  - component: {fileID: 1842112719383264317}
   m_Layer: 0
   m_Name: GoalDoor
   m_TagString: Goal
@@ -108,22 +108,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -7110170148429992180, guid: 831809df6ac46834b909f36f3005da08, type: 3}
---- !u!114 &4434039653298587698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1679075099829884963}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6f4d44b8023025448581a61ae867fcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  getKeyUI: {fileID: 0}
-  getKeySE: {fileID: 8300000, guid: 0ba927256fa48a54a8f26eb015cdae57, type: 3}
-  goalSE: {fileID: 8300000, guid: 337de20426d7b3d49af3472ed29bfc36, type: 3}
---- !u!82 &1842112719383264317
+--- !u!82 &7631466481826684798
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -132,7 +117,7 @@ AudioSource:
   m_GameObject: {fileID: 1679075099829884963}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -6514313166058767671, guid: f8df66fe56bcef24a97069edf2c048cd, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -219,6 +204,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4434039653298587698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679075099829884963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6f4d44b8023025448581a61ae867fcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  getKeyUI: {fileID: 0}
+  getKeySE: {fileID: 8300000, guid: 0ba927256fa48a54a8f26eb015cdae57, type: 3}
+  goalSE: {fileID: 8300000, guid: 337de20426d7b3d49af3472ed29bfc36, type: 3}
 --- !u!1 &2908711612357759925
 GameObject:
   m_ObjectHideFlags: 0

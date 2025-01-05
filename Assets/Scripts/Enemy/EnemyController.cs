@@ -59,22 +59,18 @@ public class EnemyController : MonoBehaviour
             if ((trans.localEulerAngles.y >= 271f||trans.localEulerAngles.y >= -91f)&&trans.localEulerAngles.y <= 45f)
             {
                 wallRotation_x = 0;
-               //Debug.Log("mae");
             }
             else if (trans.localEulerAngles.y >= 46f && trans.localEulerAngles.y <= 90f)
             {
                 wallRotation_x = 90;
-                //Debug.Log("migi");
             }
             else if (trans.localEulerAngles.y >= 91f && trans.localEulerAngles.y <= 180f)
             {
                 wallRotation_x = 180;
-                //Debug.Log("usiro");
             }
             else if (trans.localEulerAngles.y >= 181f && (trans.localEulerAngles.y <= 270f||trans.localEulerAngles.y <=-90f))
             {
                 wallRotation_x = 270;
-                //Debug.Log("hidari");
             }
         }
         else if (Mathf.Floor(playerTr.transform.position.y) < Mathf.Floor(enemyTr.transform.position.y) && wall)
