@@ -10,7 +10,7 @@ public class Tutorial : MonoBehaviour
     private TextMeshProUGUI tutorialText;
     
     
-   //チュートリアルの文
+   //チュートリアルの場所ごとに文章を変更する
     private void OnTriggerStay(Collider other)
     {
         if (this.gameObject.CompareTag("TutorialCamera"))
