@@ -6,11 +6,9 @@ using TMPro;
 
 public class Tutorial : MonoBehaviour
 {
-    [SerializeField]
-    private TextMeshProUGUI tutorialText;
+    [SerializeField] private TextMeshProUGUI tutorialText;
     
-    
-   //チュートリアルの場所ごとに文章を変更する
+   //チュートリアルの場所ごとに文章を表示する
     private void OnTriggerStay(Collider other)
     {
         if (this.gameObject.CompareTag("TutorialCamera"))
@@ -68,7 +66,7 @@ public class Tutorial : MonoBehaviour
             tutorialText.text = "鍵を持って家のドアに行くとゲームクリアです。入手した鍵は左下の表示されます。";
         }
     }
-    //該当の場所を過ぎたら戻す
+    //離れたらTextを戻す
     private void OnTriggerExit(Collider other)
     {
             tutorialText.text = "";

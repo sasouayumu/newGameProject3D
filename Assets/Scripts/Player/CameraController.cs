@@ -6,13 +6,10 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     private GameObject targetObj;//カメラが追従するオブジェクト
-    private GameObject enemyObj;//Enemyオブジェクト
-    [SerializeField]
-    private GameObject SecondCamera;
+    [SerializeField] private GameObject SecondCamera;//プレイヤーの後ろを見るためのカメラ
     private Vector3 targetPos;//追従するオブジェクトの場所
     private bool inversion = true; //カメラ反転
-    
-
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -24,15 +21,17 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Mathf.Approximately(Time.timeScale,0f))
+        //タイムスケールがゼロの場合は処理しない
+        if (Mathf.Approximately(Time.timeScale, 0f))
         {
             return;
         }
+
         //ターゲットの移動分、移動する
         transform.position += targetObj.transform.position - targetPos;
         targetPos = targetObj.transform.position;
 
-        //マウスホイールボタンを押している間カメラを反対に移動する
+        //マウスホイールボタンを押している間プレイヤーの前にあるカメラを起動する
         if (Input.GetMouseButtonDown(2) && inversion)
         {
             inversion = false;
@@ -44,20 +43,21 @@ public class CameraController : MonoBehaviour
             inversion = true;
             SecondCamera.gameObject.SetActive(false);
         }
-      
+
         float mouseInputX;
-        
+
         //マウスの左クリックを押している間
         if (Input.GetMouseButton(0))
         {
             //マウスの移動分公転させる
             mouseInputX = Input.GetAxis("Mouse X");
-           
+
             transform.RotateAround(targetPos, Vector3.up, mouseInputX * 50f);
-           
+
         }
     }
-    //カメラを反転させる
+
+    //カメラを反転させる処理
     public void InversionCamera()
     {
         transform.RotateAround(targetPos, Vector3.up, 180);

@@ -6,9 +6,8 @@ using UnityEngine.SceneManagement;
 public class GameClear : MonoBehaviour
 {
     private static bool key = false;
-    [SerializeField]
-    private GameObject getKeyUI;
-    [SerializeField]public AudioClip getKeySE;
+    [SerializeField] private GameObject getKeyUI;
+    [SerializeField] public AudioClip getKeySE;
     [SerializeField] public AudioClip goalSE;
     private  AudioSource audioSource;
     static int sceneNumber;

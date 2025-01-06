@@ -24,6 +24,7 @@ public class GameOver : MonoBehaviour
         }
     }
 
+    //もう一度ボタン
     public void Retry()
     {
         //Retryボタンを押したら同じシーンを再生する

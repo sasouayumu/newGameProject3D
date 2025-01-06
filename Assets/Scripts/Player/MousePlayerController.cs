@@ -10,7 +10,6 @@ using UnityEngine.UI;
 
 public class MousePlayerController : MonoBehaviour
 {
-    private int moveInversion = 1;//後ろを向くときに移動方向をそのままにする
     private float moveSpeed = 8f;//移動速度
     private float inputV;
     private float jumpForce = 6f;//ジャンプ力
@@ -28,22 +27,17 @@ public class MousePlayerController : MonoBehaviour
     private bool aKey = true;
     private bool dKey = true;
     private bool upWall = false;
-    //Player移動用の座標
-    private Vector3 velocity;
     //ポールジャンプ用
     [SerializeField] private Transform poleTarget;
     [SerializeField] private float spinSpeed =4f;
-    
     //PlayerのRigidbody
     private Rigidbody rbPlayer;
     private Animator animator;
     private EnemyController EnemyController;
-    [SerializeField]
-    private CameraController CameraController;
+    [SerializeField] private CameraController CameraController;
     //ダッシュゲージのスライダー
-    [SerializeField]
-    private Slider dushGaugeSlider;
-    //SE関係
+    [SerializeField] private Slider dushGaugeSlider;
+    //Audio関係
     public AudioClip jampSE;
     public AudioClip runSE;
     public AudioClip upWallSE;
@@ -172,7 +166,7 @@ public class MousePlayerController : MonoBehaviour
         Vector3 moveFoward = cameraFoward;
       
         //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-        rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
+        rbPlayer.velocity =  moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
 
         //キャラクターの向きを進行方向に
         if (moveFoward != Vector3.zero)
