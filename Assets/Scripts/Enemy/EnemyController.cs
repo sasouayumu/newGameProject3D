@@ -23,7 +23,6 @@ public class EnemyController : MonoBehaviour
     //Player‚Ì•ÇƒLƒbƒN‚Ì“–‚½‚è”»’è
     public  bool CheckWallKick;
     public bool GetSetwallKick { get { return CheckWallKick; } set { CheckWallKick = value; } }
-    MousePlayerController mpc;
     private int janpStand = 1;
     
     void Start()
@@ -33,8 +32,6 @@ public class EnemyController : MonoBehaviour
         enemyTr = GameObject.FindGameObjectWithTag("Enemy").transform;
         rbEnemy = GetComponent<Rigidbody>();
         player = GameObject.Find("Player");
-        
-        mpc = player.GetComponent<MousePlayerController>();
         trans = transform;
         prevPos = trans.position;
         

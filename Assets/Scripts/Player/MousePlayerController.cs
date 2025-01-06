@@ -14,19 +14,17 @@ public class MousePlayerController : MonoBehaviour
     private float moveSpeed = 8f;//移動速度
     private float inputV;
     private float jumpForce = 6f;//ジャンプ力
-    private float dushGauge = 3f;
     //ジャンプや走る処理の判定
     public  bool jump = true;
     private bool dush = true;
     private bool coroutine = true;
-    private bool coroutine2 = true;
     private bool wkey = false;
     private bool poleTouch = false;
-    private bool spinning = false;
     //壁の当たり判定
     private bool wallTouch;
     public bool wallTouchgs { get { return wallTouch; } set { wallTouch = false; } }
-    private bool jumpStand;
+    private bool jumpStand;//ジャンプ台の当たり判定
+    //AkeyとDkeyで壁をのぼるための判定
     private bool aKey = true;
     private bool dKey = true;
     private bool upWall = false;
@@ -42,8 +40,10 @@ public class MousePlayerController : MonoBehaviour
     private EnemyController EnemyController;
     [SerializeField]
     private CameraController CameraController;
+    //ダッシュゲージのスライダー
     [SerializeField]
     private Slider dushGaugeSlider;
+    //SE関係
     public AudioClip jampSE;
     public AudioClip runSE;
     public AudioClip upWallSE;
@@ -62,6 +62,7 @@ public class MousePlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //タイムスケールがゼロの場合は処理をしない
         if (Mathf.Approximately(Time.timeScale, 0f))
         {
             return;
@@ -129,15 +130,14 @@ public class MousePlayerController : MonoBehaviour
         {
             audioSource.PlayOneShot(jampSE);
             animator.Play("Jump", 0, 0);//ジャンプのモーション
-            spinning = true;
             transform.RotateAround(poleTarget.position,-transform.right,spinSpeed);
             rbPlayer.velocity = Vector3.up * jumpForce;
-            spinning = false;
         }
         
         //右クリックで走るようにする（Playerの移動速度を上げる）空中では走るれないようにする
         if (Input.GetMouseButton(1) && dush && jump&&dushGaugeSlider.value > 0)
         {
+            StopCoroutine("DushStop");
             moveSpeed = 15;
             
             if (coroutine)
@@ -150,12 +150,11 @@ public class MousePlayerController : MonoBehaviour
         else
         {
             //一定時間走ったら速度をもとに戻す
-            if (!coroutine && coroutine2)
+            if (!coroutine)
             {
                 dush = false;
                 coroutine = true;
-                coroutine2 = false;
-
+                
                 StopCoroutine("DushCotroller");
                 StartCoroutine("DushStop");
             }
@@ -171,12 +170,9 @@ public class MousePlayerController : MonoBehaviour
 
         //方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveFoward = cameraFoward;
-        if (!spinning)
-        {
-            //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-            rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
-
-        }
+      
+        //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
+        rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
 
         //キャラクターの向きを進行方向に
         if (moveFoward != Vector3.zero)
@@ -205,10 +201,8 @@ public class MousePlayerController : MonoBehaviour
         {
             yield return new WaitForSeconds(1.0f);
             dushGaugeSlider.value += 1f;
+            dush = true;
         }
-
-        coroutine2 = true;
-        dush = true;
     }
 
     private void OnCollisionStay(Collision collision)

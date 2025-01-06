@@ -20,7 +20,7 @@ public class Tutorial : MonoBehaviour
 
         if (this.gameObject.CompareTag("TutorialSecondCamera"))
         {
-            tutorialText.text = "マウスホイールボタンを押すことでキャラの後ろを見ることができます。";
+            tutorialText.text = "マウスホイールボタンを押すことでプレイヤーの後ろを見ることができます。";
         }
 
         if (this.gameObject.CompareTag("TutorialDush"))
