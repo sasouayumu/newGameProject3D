@@ -28,11 +28,11 @@ public class GameClear : MonoBehaviour
             StartCoroutine("Goal");
         }
 
-        //Œ®‚É“–‚½‚Á‚½‚çkey‚ğTrue‚É‚·‚é
+        //Œ®‚É“–‚½‚Á‚½‚çkey‚ğTrue‚É‚µ‚ÄAŒ®‚ğÁ‚·
         if (collision.gameObject.CompareTag("Player") && this.gameObject.CompareTag("Key"))
         {
             key = true;
-            audioSource.PlayOneShot(getKeySE);
+            AudioSource.PlayClipAtPoint(getKeySE,transform.position);
             getKeyUI.SetActive(true);
             Destroy(this.gameObject);
         }

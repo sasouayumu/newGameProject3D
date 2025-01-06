@@ -20,8 +20,6 @@ public class MousePlayerController : MonoBehaviour
     private bool dush = true;
     private bool coroutine = true;
     private bool coroutine2 = true;
-    private bool move = true;
-    private bool key = false;
     private bool wkey = false;
     private bool poleTouch = false;
     private bool spinning = false;
@@ -86,7 +84,7 @@ public class MousePlayerController : MonoBehaviour
             }
         }
 
-        //壁に当たりながらAkeyとDkeyを交互に押すことで壁に登れる
+        //壁に当たりながらAkeyとDkeyを交互に押すことで壁をのぼる
         if(Input.GetKeyDown(KeyCode.A)&&aKey&&wallTouch)
         {
             aKey = false;
@@ -173,12 +171,12 @@ public class MousePlayerController : MonoBehaviour
 
         //方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveFoward = cameraFoward;
-        //if (!spinning)
-        //{
+        if (!spinning)
+        {
             //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-             rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
+            rbPlayer.velocity = moveInversion * moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
 
-        //}
+        }
 
         //キャラクターの向きを進行方向に
         if (moveFoward != Vector3.zero)
