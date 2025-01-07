@@ -117,6 +117,7 @@ GameObject:
   - component: {fileID: 1694697882055445991}
   - component: {fileID: 2178674051364638410}
   - component: {fileID: 140701601766080560}
+  - component: {fileID: 7545189276122863608}
   m_Layer: 0
   m_Name: UpWall
   m_TagString: Wall
@@ -212,6 +213,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &7545189276122863608
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8505139384795609803}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1, y: 1.0034983, z: 1.1}
+  m_Center: {x: 0, y: -0.0033855094, z: 0}
 --- !u!1 &9187119621655802021
 GameObject:
   m_ObjectHideFlags: 0

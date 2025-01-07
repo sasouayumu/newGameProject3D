@@ -43,35 +43,38 @@ public class EnemyController : MonoBehaviour
         int wallRotation_x = 0;//壁に登るときの角度
         
         //Playerが高い場所に行き、FloorがTrueならジャンプする
-        if ((Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)||stepJamp)
+        if ((Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)||stepJamp)
         {
+            Debug.Log("a");
             rbEnemy.velocity = Vector3.up * jump* janpStand;
         }
         //Playerが上にいて壁にくっついているなら壁を登る
         else if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
+            Debug.Log("b");
             rbEnemy.velocity = Vector3.up * jump * 0.5f;
             upRotation = 270;//壁を登るときは上を向くようにする
             //向いている方向によって壁に向く方向を変える
-            if ((trans.localEulerAngles.y >= 271f||trans.localEulerAngles.y >= -91f)&&trans.localEulerAngles.y <= 45f)
-            {
-                wallRotation_x = 0;
-            }
-            else if (trans.localEulerAngles.y >= 46f && trans.localEulerAngles.y <= 90f)
-            {
-                wallRotation_x = 90;
-            }
-            else if (trans.localEulerAngles.y >= 91f && trans.localEulerAngles.y <= 180f)
-            {
-                wallRotation_x = 180;
-            }
-            else if (trans.localEulerAngles.y >= 181f && (trans.localEulerAngles.y <= 270f||trans.localEulerAngles.y <=-90f))
-            {
-                wallRotation_x = 270;
-            }
+            //if ((trans.localEulerAngles.y >= 271f||trans.localEulerAngles.y >= -91f)&&trans.localEulerAngles.y <= 45f)
+            //{
+            //    wallRotation_x = 0;
+            //}
+            //else if (trans.localEulerAngles.y >= 46f && trans.localEulerAngles.y <= 90f)
+            //{
+            //    wallRotation_x = 90;
+            //}
+            //else if (trans.localEulerAngles.y >= 91f && trans.localEulerAngles.y <= 180f)
+            //{
+            //    wallRotation_x = 180;
+            //}
+            //else if (trans.localEulerAngles.y >= 181f && (trans.localEulerAngles.y <= 270f||trans.localEulerAngles.y <=-90f))
+            //{
+            //    wallRotation_x = 270;
+            //}
         }
         else if (Mathf.Floor(playerTr.transform.position.y) < Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
+            Debug.Log("c");
             //壁にくっついていてPlayerと同じ高さにいるならPlayerの方向へ飛ぶ
             transform.position =
                  Vector3.MoveTowards(transform.position,
@@ -81,18 +84,21 @@ public class EnemyController : MonoBehaviour
         }
         else if (GetSetwallKick && transform.position != SetGetwallTouchPos&&!wall)
         {
+            Debug.Log("d");
             //Playerが壁キックしている間はPlayerが壁に当たった場所へ進むようにする
             transform.position =
                Vector3.MoveTowards(transform.position, SetGetwallTouchPos, speed * Time.deltaTime);
             
         }
-        else if (Mathf.Floor(playerTr.transform.position.y-enemyTr.transform.position.y)>10f)
+        else if (Mathf.Floor(playerTr.transform.position.y-enemyTr.transform.position.y)>15f)
         {
+            Debug.Log("f");
             //Playerがとても高い場所にいった場合、高くジャンプするようにする
             rbEnemy.velocity = Vector3.up * 10;
         }
         else
         {
+            Debug.Log("g");
             //Playerの位置を取得してその方向に進む
             transform.position =
             Vector3.MoveTowards(transform.position,
@@ -112,14 +118,15 @@ public class EnemyController : MonoBehaviour
         //静止している状態だと、進行方向を特定できないため回転しない
         if (delta == Vector3.zero)
             return;
-        
+
         //進行方向に向くようにクォータニオンを取得
         Quaternion rotation = Quaternion.LookRotation(new Vector3(delta.x, upRotation, delta.z), Vector3.up);
-       
+
         if (wall)//壁に上るとき壁の方に向く
         {
-            rotation = Quaternion.LookRotation(new Vector3(wallRotation_x, upRotation,0),Vector3.up);
-        }else if (!floor)//ジャンプするときに上を向けるようにする
+            rotation = Quaternion.LookRotation(new Vector3(wallRotation_x, upRotation, 0), Vector3.up);
+        }
+        else if (!floor)//ジャンプするときに上を向けるようにする
         {
             rotation = Quaternion.LookRotation(delta, Vector3.up);
         }
@@ -146,24 +153,40 @@ public class EnemyController : MonoBehaviour
         {
             stepJamp = true;
         }
-        //壁の当たり判定
-        if (collision.gameObject.CompareTag("Wall"))
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Wall"))
         {
             wall = true;
+            if(Physics.Raycast(transform.position+Vector3.up,transform.forward,out RaycastHit hit, 10))
+            {
+                Quaternion rotation = Quaternion.LookRotation(-hit.normal);
+                rotation.x = 0; rotation.z = 0;
+                Debug.Log(hit.normal);
+                transform.rotation = rotation;
+            }
         }
-        else
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Wall"))
         {
             wall = false;
         }
     }
     private void OnCollisionExit(Collision collision)
     {
-        //段差に当たったらジャンプできるようにする
         if (collision.gameObject.CompareTag("Step") || collision.gameObject.CompareTag("floor"))
         {
             floor = false;
         }
 
+        //if (collision.gameObject.CompareTag("Wall"))
+        //{
+        //    wall = false;
+        //}
 
         if (collision.gameObject.CompareTag("Step"))
         {
