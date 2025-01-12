@@ -12,7 +12,8 @@ public class MousePlayerController : MonoBehaviour
 {
     private float moveSpeed = 8f;//移動速度
     private float inputV;
-    private float jumpForce = 6f;//ジャンプ力
+    private float jumpForce = 4.5f;//ジャンプ力
+    private float jumpStand = 1;//ジャンプ台の当たり判定
     //ジャンプや走る処理の判定
     public  bool jump = true;
     private bool dush = true;
@@ -22,7 +23,6 @@ public class MousePlayerController : MonoBehaviour
     //壁の当たり判定
     private bool wallTouch;
     public bool wallTouchgs { get { return wallTouch; } set { wallTouch = false; } }
-    private bool jumpStand;//ジャンプ台の当たり判定
     //AkeyとDkeyで壁をのぼるための判定
     private bool aKey = true;
     private bool dKey = true;
@@ -69,14 +69,8 @@ public class MousePlayerController : MonoBehaviour
             audioSource.PlayOneShot(jampSE);
             animator.Play("Jump", 0, 0);//ジャンプのモーション
             //ジャンプ台に乗っているなら高くジャンプ
-            if (jumpStand)
-            {
-                rbPlayer.velocity = Vector3.up * jumpForce*2;
-            }
-            else
-            {
-                rbPlayer.velocity = Vector3.up * jumpForce;
-            }
+            rbPlayer.velocity = Vector3.up * jumpForce*jumpStand;
+            
         }
 
         //壁に当たりながらAkeyとDkeyを交互に押すことで壁をのぼる
@@ -224,11 +218,6 @@ public class MousePlayerController : MonoBehaviour
             //Playerが地面にいる間はEnemyは壁にいる時の処理をしないようにする
             EnemyController.GetSetwallKick = false;
         }
-        //ジャンプ台の当たり判定
-        if (collision.gameObject.CompareTag("JumpStand"))
-        {
-            jumpStand = true;
-        }
     }
 
     private void OnCollisionExit(Collision collision)
@@ -244,11 +233,6 @@ public class MousePlayerController : MonoBehaviour
         {
             jump = false;
         }
-
-        if (collision.gameObject.CompareTag("JumpStand"))
-        {
-            jumpStand = false;
-        }
     }
 
     //ポールに当たった時の処理
@@ -260,6 +244,11 @@ public class MousePlayerController : MonoBehaviour
            
             poleTouch = true ;
         }
+
+        if (other.gameObject.CompareTag("JumpStand"))
+        {
+            jumpStand = 3;
+        }
     }
 
     //離れたら戻す
@@ -268,6 +257,11 @@ public class MousePlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Pole"))
         {
             poleTouch = false;
+        }
+
+        if (other.gameObject.CompareTag("JumpStand"))
+        {
+            jumpStand = 1;
         }
     }
 

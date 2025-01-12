@@ -23,7 +23,7 @@ public class EnemyController : MonoBehaviour
     //Player‚Ì•ÇƒLƒbƒN‚Ì“–‚½‚è”»’è
     public  bool CheckWallKick;
     public bool GetSetwallKick { get { return CheckWallKick; } set { CheckWallKick = value; } }
-    private int janpStand = 1;
+    private int jampStand = 1;
     
     void Start()
     {
@@ -46,7 +46,7 @@ public class EnemyController : MonoBehaviour
         if ((Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)||stepJamp)
         {
             Debug.Log("a");
-            rbEnemy.velocity = Vector3.up * jump* janpStand;
+            rbEnemy.velocity = Vector3.up * jump* jampStand;
         }
         //Player‚ªã‚É‚¢‚Ä•Ç‚É‚­‚Á‚Â‚¢‚Ä‚¢‚é‚È‚ç•Ç‚ð“o‚é
         else if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
@@ -55,22 +55,22 @@ public class EnemyController : MonoBehaviour
             rbEnemy.velocity = Vector3.up * jump * 0.5f;
             upRotation = 270;//•Ç‚ð“o‚é‚Æ‚«‚Íã‚ðŒü‚­‚æ‚¤‚É‚·‚é
             //Œü‚¢‚Ä‚¢‚é•ûŒü‚É‚æ‚Á‚Ä•Ç‚ÉŒü‚­•ûŒü‚ð•Ï‚¦‚é
-            //if ((trans.localEulerAngles.y >= 271f||trans.localEulerAngles.y >= -91f)&&trans.localEulerAngles.y <= 45f)
-            //{
-            //    wallRotation_x = 0;
-            //}
-            //else if (trans.localEulerAngles.y >= 46f && trans.localEulerAngles.y <= 90f)
-            //{
-            //    wallRotation_x = 90;
-            //}
-            //else if (trans.localEulerAngles.y >= 91f && trans.localEulerAngles.y <= 180f)
-            //{
-            //    wallRotation_x = 180;
-            //}
-            //else if (trans.localEulerAngles.y >= 181f && (trans.localEulerAngles.y <= 270f||trans.localEulerAngles.y <=-90f))
-            //{
-            //    wallRotation_x = 270;
-            //}
+            if ((trans.localEulerAngles.y >= 271f || trans.localEulerAngles.y >= -91f) && trans.localEulerAngles.y <= 45f)
+            {
+                wallRotation_x = 0;
+            }
+            else if (trans.localEulerAngles.y >= 46f && trans.localEulerAngles.y <= 90f)
+            {
+                wallRotation_x = 90;
+            }
+            else if (trans.localEulerAngles.y >= 91f && trans.localEulerAngles.y <= 180f)
+            {
+                wallRotation_x = 180;
+            }
+            else if (trans.localEulerAngles.y >= 181f && (trans.localEulerAngles.y <= 270f || trans.localEulerAngles.y <= -90f))
+            {
+                wallRotation_x = 270;
+            }
         }
         else if (Mathf.Floor(playerTr.transform.position.y) < Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
@@ -146,7 +146,7 @@ public class EnemyController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("JumpStand"))
         {
-            janpStand = 2;
+            jampStand = 2;
         }
 
         if (collision.gameObject.CompareTag("Step"))
@@ -195,7 +195,7 @@ public class EnemyController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("JumpStand"))
         {
-            janpStand = 1;
+            jampStand = 1;
         }
     }
 
