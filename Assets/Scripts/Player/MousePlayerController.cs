@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class MousePlayerController : MonoBehaviour
 {
-    private float moveSpeed = 8f;//移動速度
+    private float moveSpeed = 4.5f;//移動速度
     private float inputV;
     private float jumpForce = 4.5f;//ジャンプ力
     private float jumpStand = 1;//ジャンプ台の当たり判定
@@ -157,22 +157,22 @@ public class MousePlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        //カメラの方向からX-Z平面の単位ベクトルを取得
+        Vector3 cameraFoward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+
+        //方向キーの入力値とカメラの向きから、移動方向を決定
+        Vector3 moveFoward = cameraFoward;
+
         if (run)
         {
-            //カメラの方向からX-Z平面の単位ベクトルを取得
-            Vector3 cameraFoward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
-
-            //方向キーの入力値とカメラの向きから、移動方向を決定
-            Vector3  moveFoward = cameraFoward;
-
             //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
             rbPlayer.velocity = moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
+        }
 
-            //キャラクターの向きを進行方向に
-            if (moveFoward != Vector3.zero)
-            {
-                transform.rotation = Quaternion.LookRotation(moveFoward * Time.deltaTime);
-            }
+        //キャラクターの向きを進行方向に
+        if (moveFoward != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(moveFoward * Time.deltaTime);
         }
     }
     

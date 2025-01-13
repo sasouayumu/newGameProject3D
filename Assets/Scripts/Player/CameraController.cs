@@ -47,14 +47,10 @@ public class CameraController : MonoBehaviour
         float mouseInputX;
 
         //マウスの左クリックを押している間
-        if (Input.GetMouseButton(0))
-        {
-            //マウスの移動分公転させる
-            mouseInputX = Input.GetAxis("Mouse X");
+        //マウスの移動分公転させる
+        mouseInputX = Input.GetAxis("Mouse X");
 
-            transform.RotateAround(targetPos, Vector3.up, mouseInputX * 50f);
-
-        }
+        transform.RotateAround(targetPos, Vector3.up, mouseInputX * 50f);
     }
 
     //カメラを反転させる処理
