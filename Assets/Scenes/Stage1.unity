@@ -419,7 +419,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 332674679914226068, guid: f64086b65a93d0c45966afb7bea83787, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3288569094512539187, guid: f64086b65a93d0c45966afb7bea83787, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2277,7 +2277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 639436920731606048, guid: 6ca6f31824cedc646934129c8f9b5e4c, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Step
       objectReference: {fileID: 0}
     - target: {fileID: 7727875657746210520, guid: 6ca6f31824cedc646934129c8f9b5e4c, type: 3}
       propertyPath: m_LocalScale.x
@@ -3051,6 +3051,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3351861220362792429, guid: 292d4d446a06d0e4db773265345e74ec, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6578939446015627087, guid: 292d4d446a06d0e4db773265345e74ec, type: 3}
       propertyPath: m_Name
       value: GameBGM
@@ -3631,6 +3635,10 @@ PrefabInstance:
     - target: {fileID: 3956690141628478147, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8391097777548849877, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
+      propertyPath: m_Constraints
+      value: 112
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

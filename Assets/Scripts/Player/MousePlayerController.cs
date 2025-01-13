@@ -27,6 +27,7 @@ public class MousePlayerController : MonoBehaviour
     private bool aKey = true;
     private bool dKey = true;
     private bool upWall = false;
+    private bool run = true;
     //ポールジャンプ用
     [SerializeField] private Transform poleTarget;
     [SerializeField] private float spinSpeed =4f;
@@ -63,6 +64,7 @@ public class MousePlayerController : MonoBehaviour
         }
 
         inputV = Input.GetAxisRaw("Vertical");
+
         //スペースでジャンプ
         if (Input.GetKey(KeyCode.Space) && jump)
         {
@@ -102,11 +104,13 @@ public class MousePlayerController : MonoBehaviour
             animator.Play("Jump", 0, 0);//ジャンプのモーション
             rbPlayer.velocity = Vector3.up * 7;
             CameraController.InversionCamera();
+
             //一度だけ敵に壁に当たった位置を送る
             if (!EnemyController.GetSetwallKick)
             {
                 EnemyController.wallTouchPos = transform.position;
             }
+
             EnemyController.GetSetwallKick = true;
         }
         else
@@ -153,19 +157,22 @@ public class MousePlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        //カメラの方向からX-Z平面の単位ベクトルを取得
-        Vector3 cameraFoward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
-
-        //方向キーの入力値とカメラの向きから、移動方向を決定
-        Vector3 moveFoward = cameraFoward;
-      
-        //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-        rbPlayer.velocity =  moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
-
-        //キャラクターの向きを進行方向に
-        if (moveFoward != Vector3.zero)
+        if (run)
         {
-            transform.rotation = Quaternion.LookRotation(moveFoward*Time.deltaTime);
+            //カメラの方向からX-Z平面の単位ベクトルを取得
+            Vector3 cameraFoward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+
+            //方向キーの入力値とカメラの向きから、移動方向を決定
+            Vector3  moveFoward = cameraFoward;
+
+            //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
+            rbPlayer.velocity = moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
+
+            //キャラクターの向きを進行方向に
+            if (moveFoward != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(moveFoward * Time.deltaTime);
+            }
         }
     }
     
@@ -185,6 +192,7 @@ public class MousePlayerController : MonoBehaviour
     {
         audioSource.Stop();
         int gauge = 3-(int)dushGaugeSlider.value;
+
         for (int i = gauge; i >= 0; i--)
         {
             yield return new WaitForSeconds(1.0f);
@@ -203,6 +211,11 @@ public class MousePlayerController : MonoBehaviour
             dKey = true;
             upWall = false;
             animator.Play("Idle");//着地したら走るモーションに戻す
+        }
+
+        if (collision.gameObject.CompareTag("Step")||collision.gameObject.CompareTag("Wall"))
+        {
+            run = false;
         }
     }
 
@@ -232,6 +245,11 @@ public class MousePlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("floor")||collision.gameObject.CompareTag("JumpStand"))
         {
             jump = false;
+        }
+
+        if (collision.gameObject.CompareTag("Step") || collision.gameObject.CompareTag("Wall"))
+        {
+            run = true;
         }
     }
 
