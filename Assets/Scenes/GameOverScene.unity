@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -970,7 +970,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 100
-  m_Range: 10
+  m_Range: 50
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -1028,7 +1028,7 @@ Transform:
   m_GameObject: {fileID: 1041119647}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 4.7, z: -5.5}
+  m_LocalPosition: {x: 0, y: 10, z: -5.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1049,7 +1049,7 @@ PrefabInstance:
     - target: {fileID: 838200134566861318, guid: dc3dacb2e343b8e4790baf35c3e256d7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: d33211d8fa25dcc4bb8b01cd617c4d7b, type: 2}
+      objectReference: {fileID: 2100000, guid: dcf4f81fcf6b4624986f79b7e66638d3, type: 2}
     - target: {fileID: 6020456865783246707, guid: dc3dacb2e343b8e4790baf35c3e256d7, type: 3}
       propertyPath: m_Name
       value: Floor

@@ -10,10 +10,12 @@ using UnityEngine.UI;
 
 public class MousePlayerController : MonoBehaviour
 {
-    private float moveSpeed = 4.5f;//移動速度
+    private float moveSpeed;//移動速度
+    [SerializeField]private float upSpeed = 8f;
+    [SerializeField] private float usuallySpeed = 5f;
     private float inputV;
-    private float jumpForce = 4.5f;//ジャンプ力
-    private float jumpStand = 1;//ジャンプ台の当たり判定
+    [SerializeField]private float jumpForce = 4.5f;//ジャンプ力
+    private float jumpStand = 1f;//ジャンプ台の倍率
     //ジャンプや走る処理の判定
     public  bool jump = true;
     private bool dush = true;
@@ -46,6 +48,7 @@ public class MousePlayerController : MonoBehaviour
     
     void Start()
     {
+        moveSpeed = usuallySpeed;
         rbPlayer = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         GameObject enemyObj = GameObject.Find("Enemy");
@@ -62,6 +65,8 @@ public class MousePlayerController : MonoBehaviour
         {
             return;
         }
+
+        Debug.Log(run);
 
         inputV = Input.GetAxisRaw("Vertical");
 
@@ -93,7 +98,7 @@ public class MousePlayerController : MonoBehaviour
         if (upWall)
         {
             audioSource.PlayOneShot(upWallSE);
-            transform.position += new Vector3(0,0.5f,0);
+            rbPlayer.velocity = Vector3.up*3;
             upWall = false;   
         }
 
@@ -102,7 +107,7 @@ public class MousePlayerController : MonoBehaviour
         {
             audioSource.PlayOneShot(jampSE);
             animator.Play("Jump", 0, 0);//ジャンプのモーション
-            rbPlayer.velocity = Vector3.up * 7;
+            rbPlayer.velocity = Vector3.up * 8;
             CameraController.InversionCamera();
 
             //一度だけ敵に壁に当たった位置を送る
@@ -117,23 +122,24 @@ public class MousePlayerController : MonoBehaviour
         {
             wkey = false;
         }
+
         //ポールジャンプの処理
         if (Input.GetKey(KeyCode.S)&&poleTouch)
         {
             audioSource.PlayOneShot(jampSE);
             animator.Play("Jump", 0, 0);//ジャンプのモーション
             transform.RotateAround(poleTarget.position,-transform.right,spinSpeed);
-            rbPlayer.velocity = Vector3.up * jumpForce;
+            rbPlayer.velocity = Vector3.up * jumpForce*2;
         }
         
         //右クリックで走るようにする（Playerの移動速度を上げる）空中では走るれないようにする
         if (Input.GetMouseButton(1) && dush && jump&&dushGaugeSlider.value > 0)
         {
             StopCoroutine("DushStop");
-            moveSpeed = 15;
             
             if (coroutine)
             {
+                moveSpeed = upSpeed;
                 audioSource.PlayOneShot(runSE);
                 coroutine = false;
                 StartCoroutine("DushCotroller");
@@ -144,14 +150,13 @@ public class MousePlayerController : MonoBehaviour
             //一定時間走ったら速度をもとに戻す
             if (!coroutine)
             {
+                moveSpeed = usuallySpeed;
                 dush = false;
                 coroutine = true;
                 
                 StopCoroutine("DushCotroller");
                 StartCoroutine("DushStop");
             }
-
-            moveSpeed = 8;
         }
     }
 
@@ -212,16 +217,38 @@ public class MousePlayerController : MonoBehaviour
             upWall = false;
             animator.Play("Idle");//着地したら走るモーションに戻す
         }
+    }
 
-        if (collision.gameObject.CompareTag("Step")||collision.gameObject.CompareTag("Wall"))
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("floor")||collision.gameObject.CompareTag("JumpStand"))
         {
-            run = false;
+            jump = false;
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    { 
-        if (collision.gameObject.CompareTag("Wall"))
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        //ポールに当たった時の処理
+        if (other.gameObject.CompareTag("Pole"))
+        {
+            poleTarget =other.transform;
+           
+            poleTouch = true ;
+        }
+
+        if (other.gameObject.CompareTag("JumpStand"))
+        {
+            jumpStand = 2.5f;
+        }
+
+        if (other.gameObject.CompareTag("Step") || other.gameObject.CompareTag("Wall"))
+        {
+            run = false;
+        }
+
+        if (other.gameObject.CompareTag("Wall"))
         {
             wallTouch = true;
             UpwardForce();
@@ -233,45 +260,10 @@ public class MousePlayerController : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        //離れたら戻す
-        if (collision.gameObject.CompareTag("Wall"))
-        {
-            DownwardForce();
-            wallTouch = false;
-        }
-
-        if (collision.gameObject.CompareTag("floor")||collision.gameObject.CompareTag("JumpStand"))
-        {
-            jump = false;
-        }
-
-        if (collision.gameObject.CompareTag("Step") || collision.gameObject.CompareTag("Wall"))
-        {
-            run = true;
-        }
-    }
-
-    //ポールに当たった時の処理
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Pole"))
-        {
-            poleTarget =other.transform;
-           
-            poleTouch = true ;
-        }
-
-        if (other.gameObject.CompareTag("JumpStand"))
-        {
-            jumpStand = 3;
-        }
-    }
-
     //離れたら戻す
     private void OnTriggerExit(Collider other)
     {
+        //離れたら戻す
         if (other.gameObject.CompareTag("Pole"))
         {
             poleTouch = false;
@@ -281,13 +273,24 @@ public class MousePlayerController : MonoBehaviour
         {
             jumpStand = 1;
         }
+
+        if (other.gameObject.CompareTag("Step") || other.gameObject.CompareTag("Wall"))
+        {
+            run = true;
+        }
+
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            DownwardForce();
+            wallTouch = false;
+        }
     }
 
     //壁に当たっている間、落ちる速度を落とす
     void UpwardForce()
     {
         //抵抗を増やす
-        rbPlayer.drag = 1;
+        rbPlayer.drag = 2;
     }
 
     void DownwardForce()

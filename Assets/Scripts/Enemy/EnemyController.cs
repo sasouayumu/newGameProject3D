@@ -45,14 +45,12 @@ public class EnemyController : MonoBehaviour
         //Playerが高い場所に行き、FloorがTrueならジャンプする
         if ((Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)||stepJamp)
         {
-            Debug.Log("a");
             rbEnemy.velocity = Vector3.up * jump* jampStand;
         }
         //Playerが上にいて壁にくっついているなら壁を登る
         else if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
-            Debug.Log("b");
-            rbEnemy.velocity = Vector3.up * jump * 0.5f;
+            rbEnemy.velocity = Vector3.up * jump * 0.25f;
             upRotation = 270;//壁を登るときは上を向くようにする
             //向いている方向によって壁に向く方向を変える
             if ((trans.localEulerAngles.y >= 271f || trans.localEulerAngles.y >= -91f) && trans.localEulerAngles.y <= 45f)
@@ -74,7 +72,6 @@ public class EnemyController : MonoBehaviour
         }
         else if (Mathf.Floor(playerTr.transform.position.y) < Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
-            Debug.Log("c");
             //壁にくっついていてPlayerと同じ高さにいるならPlayerの方向へ飛ぶ
             transform.position =
                  Vector3.MoveTowards(transform.position,
@@ -84,7 +81,6 @@ public class EnemyController : MonoBehaviour
         }
         else if (GetSetwallKick && transform.position != SetGetwallTouchPos&&!wall)
         {
-            Debug.Log("d");
             //Playerが壁キックしている間はPlayerが壁に当たった場所へ進むようにする
             transform.position =
                Vector3.MoveTowards(transform.position, SetGetwallTouchPos, speed * Time.deltaTime);
@@ -92,13 +88,11 @@ public class EnemyController : MonoBehaviour
         }
         else if (Mathf.Floor(playerTr.transform.position.y-enemyTr.transform.position.y)>15f)
         {
-            Debug.Log("f");
             //Playerがとても高い場所にいった場合、高くジャンプするようにする
             rbEnemy.velocity = Vector3.up * 10;
         }
         else
         {
-            Debug.Log("g");
             //Playerの位置を取得してその方向に進む
             transform.position =
             Vector3.MoveTowards(transform.position,
@@ -163,7 +157,6 @@ public class EnemyController : MonoBehaviour
             {
                 Quaternion rotation = Quaternion.LookRotation(-hit.normal);
                 rotation.x = 0; rotation.z = 0;
-                Debug.Log(hit.normal);
                 transform.rotation = rotation;
             }
         }
@@ -176,6 +169,7 @@ public class EnemyController : MonoBehaviour
             wall = false;
         }
     }
+
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Step") || collision.gameObject.CompareTag("floor"))
