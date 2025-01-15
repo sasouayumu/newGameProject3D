@@ -930,7 +930,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 332674679914226068, guid: f64086b65a93d0c45966afb7bea83787, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3288569094512539187, guid: f64086b65a93d0c45966afb7bea83787, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1067,7 +1067,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &1847933964
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1316,6 +1316,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -9002477153861867422, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
+      propertyPath: m_Height
+      value: 0.5668858
+      objectReference: {fileID: 0}
+    - target: {fileID: -9002477153861867422, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
+      propertyPath: m_Radius
+      value: 0.15903784
+      objectReference: {fileID: 0}
+    - target: {fileID: -9002477153861867422, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
+      propertyPath: m_Center.x
+      value: -0.026492119
+      objectReference: {fileID: 0}
+    - target: {fileID: -9002477153861867422, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
+      propertyPath: m_Center.y
+      value: 0.5927964
+      objectReference: {fileID: 0}
+    - target: {fileID: -9002477153861867422, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
+      propertyPath: m_Center.z
+      value: 0.105619475
+      objectReference: {fileID: 0}
     - target: {fileID: 1707686547637473133, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
       propertyPath: dushGaugeSlider
       value: 
@@ -1336,6 +1356,18 @@ PrefabInstance:
       propertyPath: CameraController
       value: 
       objectReference: {fileID: 1261380482}
+    - target: {fileID: 5635712958228048069, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
+      propertyPath: m_Radius
+      value: 0.1927478
+      objectReference: {fileID: 0}
+    - target: {fileID: 5635712958228048069, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5635712958228048069, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
+      propertyPath: m_Center.z
+      value: -0.011304557
+      objectReference: {fileID: 0}
     - target: {fileID: 7009740370922752530, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
       propertyPath: m_Name
       value: Player

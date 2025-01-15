@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using System.Collections.Generic;
 public class MousePlayerController : MonoBehaviour
 {
     private float moveSpeed;//移動速度
@@ -66,8 +66,6 @@ public class MousePlayerController : MonoBehaviour
             return;
         }
 
-        Debug.Log(run);
-
         inputV = Input.GetAxisRaw("Vertical");
 
         //スペースでジャンプ
@@ -98,13 +96,14 @@ public class MousePlayerController : MonoBehaviour
         if (upWall)
         {
             audioSource.PlayOneShot(upWallSE);
-            rbPlayer.velocity = Vector3.up*3;
+            rbPlayer.velocity = Vector3.up*4;
             upWall = false;   
         }
 
         //壁キックの処理
         if (Input.GetKeyDown(KeyCode.W)&&wallTouch)
         {
+            run = true;
             audioSource.PlayOneShot(jampSE);
             animator.Play("Jump", 0, 0);//ジャンプのモーション
             rbPlayer.velocity = Vector3.up * 8;
@@ -129,7 +128,7 @@ public class MousePlayerController : MonoBehaviour
             audioSource.PlayOneShot(jampSE);
             animator.Play("Jump", 0, 0);//ジャンプのモーション
             transform.RotateAround(poleTarget.position,-transform.right,spinSpeed);
-            rbPlayer.velocity = Vector3.up * jumpForce*2;
+            rbPlayer.velocity = Vector3.up * jumpForce*1.5f;
         }
         
         //右クリックで走るようにする（Playerの移動速度を上げる）空中では走るれないようにする
@@ -168,12 +167,31 @@ public class MousePlayerController : MonoBehaviour
         //方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveFoward = cameraFoward;
 
+        RaycastHit hit;
+        Debug.DrawRay(transform.position + Vector3.up, transform.forward*0.3f,UnityEngine.Color.blue,0.5f);
+        if (Physics.Raycast(transform.position+(Vector3.up/4), transform.forward, out hit, 0.3f)|| Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, 0.3f))
+        {
+            //hitしたTagがWallまたはStepならPlayerを走らないようにする
+            if (hit.collider.gameObject.CompareTag("Wall") || hit.collider.gameObject.CompareTag("Step"))
+            {
+                run = false;
+            }
+            else
+            {
+                run = true;
+            }
+        }
+        else
+        {
+            run = true;
+        }
+
         if (run)
         {
             //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
             rbPlayer.velocity = moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
         }
-
+        
         //キャラクターの向きを進行方向に
         if (moveFoward != Vector3.zero)
         {
@@ -227,7 +245,7 @@ public class MousePlayerController : MonoBehaviour
         }
     }
 
-    
+  
     private void OnTriggerEnter(Collider other)
     {
         //ポールに当たった時の処理
@@ -241,11 +259,6 @@ public class MousePlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("JumpStand"))
         {
             jumpStand = 2.5f;
-        }
-
-        if (other.gameObject.CompareTag("Step") || other.gameObject.CompareTag("Wall"))
-        {
-            run = false;
         }
 
         if (other.gameObject.CompareTag("Wall"))
@@ -272,11 +285,6 @@ public class MousePlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("JumpStand"))
         {
             jumpStand = 1;
-        }
-
-        if (other.gameObject.CompareTag("Step") || other.gameObject.CompareTag("Wall"))
-        {
-            run = true;
         }
 
         if (other.gameObject.CompareTag("Wall"))

@@ -13,57 +13,57 @@ public class Tutorial : MonoBehaviour
     {
         if (this.gameObject.CompareTag("TutorialCamera"))
         {
-            tutorialText.text = "プレイヤーはカメラの見ている方向に進み続けます。左クリックを押しながらマウスを動かすことでカメラを左右に動かせます。";
+            tutorialText.text = "プレイヤーはまっすぐ進む。左クリック長押しとマウス移動でカメラ操作。";
         }
 
         if (this.gameObject.CompareTag("TutorialSecondCamera"))
         {
-            tutorialText.text = "マウスホイールボタンを押すことでプレイヤーの後ろを見ることができます。";
+            tutorialText.text = "マウスホイールボタンで後ろを見れる。";
         }
 
         if (this.gameObject.CompareTag("TutorialDush"))
         {
-            tutorialText.text = "右クリックを押すことで走ることができます。右上のゲージがなくなると走れなくなります。";
+            tutorialText.text = "右クリック長押しでダッシュ。";
         }
 
         if (this.gameObject.CompareTag("TutorialJump"))
         {
-            tutorialText.text = "地面にいる時にSpaceを押すことでジャンプすることができます。";
+            tutorialText.text = "Spaceでジャンプ。";
         }
 
         if (this.gameObject.CompareTag("TutorialJumpStand"))
         {
-            tutorialText.text = "青色の場所でSpaceを押すことで通常より高くジャンプすることができます。";
+            tutorialText.text = "青色の場所でSpaceでより高くジャンプ。";
         }
 
         if (this.gameObject.CompareTag("TutorialPole"))
         {
-            tutorialText.text = "黄色のポールでSキーを押すことでポールを使ってジャンプすることがいます。";
+            tutorialText.text = "黄色のポールでSキーでポールを使ってジャンプ。";
         }
 
         if (this.gameObject.CompareTag("TutorialWallUp"))
         {
-            tutorialText.text = "茶色の壁でAキーとDキーを交互に押すことで登ることができます。";
+            tutorialText.text = "茶色の壁でAキーとDキー交互に押して壁を登る。";
         }
 
         if (this.gameObject.CompareTag("TutorialWallKick"))
         {
-            tutorialText.text = "茶色の壁でWキーを押すことで壁を蹴って反対側にジャンプできます。";
+            tutorialText.text = "茶色の壁でWキーで反対側へジャンプ。";
         }
 
         if (this.gameObject.CompareTag("TutorialEnemy"))
         {
-            tutorialText.text = "モンスターはプレイヤーを追いかけてきます。当たるとゲームオーバーです。";
+            tutorialText.text = "モンスターはプレイヤーを追ってくる。当たるとゲームオーバー。";
         }
 
         if (this.gameObject.CompareTag("TutorialPouse"))
         {
-            tutorialText.text = "ESCキーを押すことでポーズ画面に行けます。";
+            tutorialText.text = "ESCキーでポーズ。";
         }
 
         if (this.gameObject.CompareTag("TutorialKey"))
         {
-            tutorialText.text = "鍵を持って家のドアに行くとゲームクリアです。入手した鍵は左下の表示されます。";
+            tutorialText.text = "鍵を持って家のドアに行くとゲームクリア。入手した鍵は左下の表示。";
         }
     }
     //離れたらTextを戻す
