@@ -12,6 +12,8 @@ public class Setting : MonoBehaviour
     [SerializeField] Slider seSlider;
     static float bgmValue = 5;
     static float seValue = 5;   
+
+
     private void Start()
     {
         bgmSlider.value = bgmValue;
@@ -20,6 +22,8 @@ public class Setting : MonoBehaviour
         seSlider.onValueChanged.AddListener(SetAudioMixerSE);
         
     }
+
+
     //BGM‚ÆSE‚Ì‰¹—Ê’²®ƒo[‚Ìˆ—
     public void SetAudioMixerBGM(float value)
     {
@@ -32,6 +36,7 @@ public class Setting : MonoBehaviour
         bgmValue = bgmSlider.value;
 
     }
+
 
     public void SetAudioMixerSE(float value)
     {

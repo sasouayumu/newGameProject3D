@@ -9,10 +9,13 @@ public class GameOver : MonoBehaviour
     public AudioClip gameOverSE;
     private AudioSource audioSource;
 
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
     }
+
+
     private void OnCollisionEnter(Collision collision)
     {
         //プレイヤーに当たったらゲームオーバーシーンに移動する
@@ -24,12 +27,14 @@ public class GameOver : MonoBehaviour
         }
     }
 
+
     //もう一度ボタン
     public void Retry()
     {
         //Retryボタンを押したら同じシーンを再生する
         SceneManager.LoadScene(sceneName);
     }
+
 
     IEnumerator GameOverSE()
     {

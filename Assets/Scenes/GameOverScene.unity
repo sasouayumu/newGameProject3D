@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -552,8 +552,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -150, y: 404}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 0, y: 404}
+  m_SizeDelta: {x: 600, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &634344665
 MonoBehaviour:
@@ -575,17 +575,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: GameOver
+  m_text: "\u30B2\u30FC\u30E0\u30AA\u30FC\u30D0\u30FC"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 002f197b9070a1c4cb980a7738c46fe4, type: 2}
+  m_sharedMaterial: {fileID: 8171406452830357266, guid: 002f197b9070a1c4cb980a7738c46fe4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4294901898
+  m_fontColor: {r: 0.53940105, g: 0, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -638,7 +638,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -364.99072, w: 0}
+  m_margin: {x: 0, y: 0, z: -206.5625, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -844,7 +844,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 13ce9e4297d44d044a03249c3959adc6, type: 2}
     - target: {fileID: 7522855604846003234, guid: 6cc40c71888dc9d4288219a508b0341e, type: 3}
       propertyPath: m_Name
-      value: InvisibleWall
+      value: Dark
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -861,7 +861,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100268, guid: e39dd657be7298d408f1a135c76c3d9a, type: 3}
       propertyPath: m_Name
-      value: SD_unitychan_generic
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 400056, guid: e39dd657be7298d408f1a135c76c3d9a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1640,10 +1640,10 @@ SceneRoots:
   m_Roots:
   - {fileID: 1780335481}
   - {fileID: 620786445}
-  - {fileID: 1429573482}
-  - {fileID: 1045508680}
   - {fileID: 904192065}
-  - {fileID: 1597133254}
+  - {fileID: 1045508680}
   - {fileID: 773045426}
+  - {fileID: 1597133254}
   - {fileID: 1041119649}
   - {fileID: 248935332}
+  - {fileID: 1429573482}
