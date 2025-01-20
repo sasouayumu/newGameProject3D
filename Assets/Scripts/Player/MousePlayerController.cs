@@ -8,6 +8,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections.Generic;
+
+
 public class MousePlayerController : MonoBehaviour
 {
     //Audio関係
@@ -18,10 +20,10 @@ public class MousePlayerController : MonoBehaviour
 
     [SerializeField]private float upSpeed = 8f;
     [SerializeField] private float usuallySpeed = 5f;
-    private float moveSpeed;//移動速度
     private float inputV;
-    [SerializeField]private float jumpForce = 4.5f;//ジャンプ力
-    private float jumpStand = 1f;//ジャンプ台の倍率
+    private float moveSpeed;                        //移動速度
+    [SerializeField]private float jumpForce = 4.5f; //ジャンプ力
+    private float jumpStand = 1f;                   //ジャンプ台の倍率
     //ジャンプや走る処理の判定
     private bool jump = true;
     private bool dush = true;
@@ -48,7 +50,6 @@ public class MousePlayerController : MonoBehaviour
     [SerializeField] private Slider dushGaugeSlider;
    
     
-
     void Start()
     {
         moveSpeed = usuallySpeed;
@@ -76,7 +77,7 @@ public class MousePlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && jump)
         {
             audioSource.PlayOneShot(jampSE);
-            animator.Play("Jump", 0, 0);//ジャンプのモーション
+            animator.Play("Jump", 0, 0); //ジャンプのモーション
             //ジャンプ台に乗っているなら高くジャンプ
             rbPlayer.velocity = Vector3.up * jumpForce*jumpStand;
         }
@@ -108,7 +109,7 @@ public class MousePlayerController : MonoBehaviour
         {
             run = true;
             audioSource.PlayOneShot(jampSE);
-            animator.Play("Jump", 0, 0);//ジャンプのモーション
+            animator.Play("Jump", 0, 0); //ジャンプのモーション
             rbPlayer.velocity = Vector3.up * 8;
             CameraController.InversionCamera();
 
@@ -129,7 +130,7 @@ public class MousePlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.S)&&poleTouch)
         {
             audioSource.PlayOneShot(jampSE);
-            animator.Play("Jump", 0, 0);//ジャンプのモーション
+            animator.Play("Jump", 0, 0); //ジャンプのモーション
             transform.RotateAround(poleTarget.position,-transform.right,spinSpeed);
             rbPlayer.velocity = Vector3.up * jumpForce*1.6f;
         }

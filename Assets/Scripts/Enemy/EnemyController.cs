@@ -6,17 +6,17 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     private GameObject player;
-    private Transform playerTr;//Playerの座標
-    private Transform enemyTr;//敵の座標
-    private Transform trans;//回転用の座標
+    private Transform playerTr; //Playerの座標
+    private Transform enemyTr;  //敵の座標
+    private Transform trans;    //回転用の座標
 
     //引き渡し用のPlayerの壁に当たった座標
     public Vector3 wallTouchPos;
     public Vector3 SetGetwallTouchPos { get { return wallTouchPos; } set { wallTouchPos = value; } }
-    private Vector3 prevPos;//回転用のプライベート座標
-    [SerializeField] float speed;//移動速度
-    private float jump = 5f;//ジャンプの強さ
-    private Rigidbody rbEnemy;//敵のRigidbody情報
+    private Vector3 prevPos;      //回転用のプライベート座標
+    [SerializeField] float speed; //移動速度
+    private float jump = 5f;      //ジャンプの強さ
+    private Rigidbody rbEnemy;    //敵のRigidbody情報
 
     //当たり判定用
     private bool floor = false;
@@ -44,35 +44,31 @@ public class EnemyController : MonoBehaviour
 
     void FixedUpdate()
     {
-        int upRotation = 0;//通常時はY軸を０に固定する
-        int wallRotation_x = 0;//壁に登るときの角度
-        
+        int upRotation = 0;       //通常時はY軸を０に固定する
+        float wallRotation_x = 0; //壁に登るときの角度
+        Debug.DrawRay(transform.position, (transform.forward + new Vector3(45, 0, 45)) * 0.25f);
+        Debug.DrawRay(transform.position, (transform.forward + new Vector3(-45, 0, 45)) * 0.25f);
+        Debug.DrawRay(transform.position, transform.forward, UnityEngine.Color.red);
         //Playerが高い場所に行き、FloorがTrueならジャンプする
-        if ((Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor)||stepJamp)
+        if ((Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor) || stepJamp)
         {
-            rbEnemy.velocity = Vector3.up * jump* jampStand;
+            rbEnemy.velocity = Vector3.up * jump * jampStand;
         }
         //Playerが上にいて壁にくっついているなら壁を登る
         else if (Mathf.Ceil(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && wall)
         {
             rbEnemy.velocity = Vector3.up * jump * 0.25f;
+
             upRotation = 270;//壁を登るときは上を向くようにする
-            //向いている方向によって壁に向く方向を変える
-            if ((trans.localEulerAngles.y >= 271f || trans.localEulerAngles.y >= -91f) && trans.localEulerAngles.y <= 45f)
+
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.forward, out hit, 1f)
+                || Physics.Raycast(transform.position, transform.forward + new Vector3(-45, 0, 45), out hit, 0.25f)
+                || Physics.Raycast(transform.position, transform.forward + new Vector3(45, 0, -45), out hit, 0.25f))
             {
-                wallRotation_x = 0;
-            }
-            else if (trans.localEulerAngles.y >= 46f && trans.localEulerAngles.y <= 90f)
-            {
-                wallRotation_x = 90;
-            }
-            else if (trans.localEulerAngles.y >= 91f && trans.localEulerAngles.y <= 180f)
-            {
-                wallRotation_x = 180;
-            }
-            else if (trans.localEulerAngles.y >= 181f && (trans.localEulerAngles.y <= 270f || trans.localEulerAngles.y <= -90f))
-            {
-                wallRotation_x = 270;
+                Quaternion rota = Quaternion.LookRotation(-hit.normal);
+
+                wallRotation_x = rota.x;
             }
         }
         else if (Mathf.Floor(playerTr.transform.position.y) < Mathf.Floor(enemyTr.transform.position.y) && wall)
@@ -82,16 +78,14 @@ public class EnemyController : MonoBehaviour
                  Vector3.MoveTowards(transform.position,
                  new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
                  speed * Time.deltaTime * 2);
-            
         }
-        else if (GetSetwallKick && transform.position != SetGetwallTouchPos&&!wall)
+        else if (GetSetwallKick && transform.position != SetGetwallTouchPos && !wall)
         {
             //Playerが壁キックしている間はPlayerが壁に当たった場所へ進むようにする
             transform.position =
                Vector3.MoveTowards(transform.position, SetGetwallTouchPos, speed * Time.deltaTime);
-            
         }
-        else if (Mathf.Floor(playerTr.transform.position.y-enemyTr.transform.position.y)>15f)
+        else if (Mathf.Floor(playerTr.transform.position.y - enemyTr.transform.position.y) > 15f)
         {
             //Playerがとても高い場所にいった場合、高くジャンプするようにする
             rbEnemy.velocity = Vector3.up * 10;
@@ -104,6 +98,7 @@ public class EnemyController : MonoBehaviour
             new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
             speed * Time.deltaTime);
         }
+
         //Playerの方向を向くようにする処理
         //現在フレームのワールド位置
         var pos = trans.position;

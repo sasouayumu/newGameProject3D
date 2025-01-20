@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private GameObject SecondCamera;//プレイヤーの後ろを見るためのカメラ
-    private GameObject targetObj;//カメラが追従するオブジェクト
-    private Vector3 targetPos;//追従するオブジェクトの場所
-    private bool inversion = true; //カメラ反転
+    [SerializeField] private GameObject SecondCamera; //プレイヤーの後ろを見るためのカメラ
+    private GameObject targetObj;                     //カメラが追従するオブジェクト
+    private Vector3 targetPos;                        //追従するオブジェクトの場所
+    private bool inversion = true;                    //カメラ反転
    
 
     // Start is called before the first frame update
