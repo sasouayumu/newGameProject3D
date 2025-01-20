@@ -46,6 +46,7 @@ public class MousePlayerController : MonoBehaviour
     public AudioClip upWallSE;
     private AudioSource audioSource;
     
+
     void Start()
     {
         moveSpeed = usuallySpeed;
@@ -56,6 +57,7 @@ public class MousePlayerController : MonoBehaviour
         dushGaugeSlider.value = 3f;
         audioSource = GetComponent<AudioSource>();
     }
+
 
     // Update is called once per frame
     void Update()
@@ -75,7 +77,6 @@ public class MousePlayerController : MonoBehaviour
             animator.Play("Jump", 0, 0);//ジャンプのモーション
             //ジャンプ台に乗っているなら高くジャンプ
             rbPlayer.velocity = Vector3.up * jumpForce*jumpStand;
-            
         }
 
         //壁に当たりながらAkeyとDkeyを交互に押すことで壁をのぼる
@@ -159,6 +160,7 @@ public class MousePlayerController : MonoBehaviour
         }
     }
 
+
     void FixedUpdate()
     {
         //カメラの方向からX-Z平面の単位ベクトルを取得
@@ -199,6 +201,7 @@ public class MousePlayerController : MonoBehaviour
         }
     }
     
+
     //走るのをやめたら一定時間走れないようにする
     private IEnumerator DushCotroller()
     {
