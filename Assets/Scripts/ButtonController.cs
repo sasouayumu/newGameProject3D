@@ -6,12 +6,15 @@ public class ButtonController : MonoBehaviour
 {
     //各ボタンの処理
     private Pause pause;
+
+
     //タイトルボタン
     public void Title()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("TitleScene");
     }
+
 
     //再開ボタン
     public void Restart()
@@ -21,11 +24,13 @@ public class ButtonController : MonoBehaviour
         pause.pause();
     }
 
+
     //プレイボタン
     public void Play()
     {
         SceneManager.LoadScene("Stage1");
     }
+
 
     //チュートリアルボタン
     public void Tutorial()
@@ -33,17 +38,20 @@ public class ButtonController : MonoBehaviour
         SceneManager.LoadScene(4);
     }
 
+
     //設定ボタン
     public void Setting()
     {
         SceneManager.LoadScene(3);
     }
 
+
     //クレジット表記ボタン
     public void Cregits()
     {
         SceneManager.LoadScene(5);
     }
+
 
     //やめるボタン
     public void Exit()

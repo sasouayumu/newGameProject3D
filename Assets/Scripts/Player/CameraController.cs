@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    private GameObject targetObj;//カメラが追従するオブジェクト
     [SerializeField] private GameObject SecondCamera;//プレイヤーの後ろを見るためのカメラ
+    private GameObject targetObj;//カメラが追従するオブジェクト
     private Vector3 targetPos;//追従するオブジェクトの場所
     private bool inversion = true; //カメラ反転
    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +18,7 @@ public class CameraController : MonoBehaviour
         targetObj = GameObject.Find("Player");
         targetPos = targetObj.transform.position;
     }
+
 
     // Update is called once per frame
     void Update()
@@ -51,9 +53,10 @@ public class CameraController : MonoBehaviour
             //マウスの移動分公転させる
             mouseInputX = Input.GetAxis("Mouse X");
 
-            transform.RotateAround(targetPos, Vector3.up, mouseInputX * 15f);
+            transform.RotateAround(targetPos, Vector3.up, mouseInputX * 5f);
         }
     }
+
 
     //カメラを反転させる処理
     public void InversionCamera()

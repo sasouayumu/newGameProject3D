@@ -16,6 +16,8 @@ public class GameClear : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
     }
+
+
     private void OnCollisionEnter(Collision collision)
     {
         //鍵を持ってゴールに行ったらゲームクリアシーンに進む
@@ -37,12 +39,14 @@ public class GameClear : MonoBehaviour
         }
     }
 
+
     IEnumerator Goal()
     {
         //SEを鳴らしてからシーン移動させる
         Time.timeScale = 0f;
         yield return new WaitForSecondsRealtime(0.5f);
         Time.timeScale = 1f;
+
         //チュートリアルならタイトルに普通のステージならクリア画面に移動する
         if (sceneNumber == 4)
         {
@@ -53,6 +57,8 @@ public class GameClear : MonoBehaviour
             SceneManager.LoadScene(2);
         }
     }
+
+
     public void Next()
     {
         //次のステージへ移動する最終ステージならタイトルへ戻る
@@ -64,6 +70,5 @@ public class GameClear : MonoBehaviour
         {
             SceneManager.LoadScene(sceneNumber + 1);
         }
-       
     }
 }

@@ -10,14 +10,20 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 public class MousePlayerController : MonoBehaviour
 {
-    private float moveSpeed;//移動速度
+    //Audio関係
+    [SerializeField] private AudioClip jampSE;
+    [SerializeField] private AudioClip runSE;
+    [SerializeField] private AudioClip upWallSE;
+    private AudioSource audioSource;
+
     [SerializeField]private float upSpeed = 8f;
     [SerializeField] private float usuallySpeed = 5f;
+    private float moveSpeed;//移動速度
     private float inputV;
     [SerializeField]private float jumpForce = 4.5f;//ジャンプ力
     private float jumpStand = 1f;//ジャンプ台の倍率
     //ジャンプや走る処理の判定
-    public  bool jump = true;
+    private bool jump = true;
     private bool dush = true;
     private bool coroutine = true;
     private bool wkey = false;
@@ -40,11 +46,7 @@ public class MousePlayerController : MonoBehaviour
     [SerializeField] private CameraController CameraController;
     //ダッシュゲージのスライダー
     [SerializeField] private Slider dushGaugeSlider;
-    //Audio関係
-    public AudioClip jampSE;
-    public AudioClip runSE;
-    public AudioClip upWallSE;
-    private AudioSource audioSource;
+   
     
     void Start()
     {
@@ -56,6 +58,7 @@ public class MousePlayerController : MonoBehaviour
         dushGaugeSlider.value = 3f;
         audioSource = GetComponent<AudioSource>();
     }
+
 
     // Update is called once per frame
     void Update()
@@ -128,7 +131,7 @@ public class MousePlayerController : MonoBehaviour
             audioSource.PlayOneShot(jampSE);
             animator.Play("Jump", 0, 0);//ジャンプのモーション
             transform.RotateAround(poleTarget.position,-transform.right,spinSpeed);
-            rbPlayer.velocity = Vector3.up * jumpForce*1.5f;
+            rbPlayer.velocity = Vector3.up * jumpForce*1.6f;
         }
         
         //右クリックで走るようにする（Playerの移動速度を上げる）空中では走るれないようにする
@@ -168,7 +171,7 @@ public class MousePlayerController : MonoBehaviour
         Vector3 moveFoward = cameraFoward;
 
         RaycastHit hit;
-        Debug.DrawRay(transform.position + Vector3.up, transform.forward*0.3f,UnityEngine.Color.blue,0.5f);
+        
         if (Physics.Raycast(transform.position+(Vector3.up/4), transform.forward, out hit, 0.3f)|| Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, 0.3f))
         {
             //hitしたTagがWallまたはStepならPlayerを走らないようにする
@@ -199,6 +202,7 @@ public class MousePlayerController : MonoBehaviour
         }
     }
     
+
     //走るのをやめたら一定時間走れないようにする
     private IEnumerator DushCotroller()
     {
@@ -210,6 +214,7 @@ public class MousePlayerController : MonoBehaviour
         dushGaugeSlider.value -= 1f;
         dush = false;
     }
+
 
     private IEnumerator DushStop()
     {
@@ -224,6 +229,7 @@ public class MousePlayerController : MonoBehaviour
         }
     }
 
+
     private void OnCollisionStay(Collision collision)
     {
         //二段ジャンプできないようにする（着地でジャンプできるようにする）
@@ -236,6 +242,7 @@ public class MousePlayerController : MonoBehaviour
             animator.Play("Idle");//着地したら走るモーションに戻す
         }
     }
+
 
     private void OnCollisionExit(Collision collision)
     {
@@ -254,6 +261,7 @@ public class MousePlayerController : MonoBehaviour
             poleTarget =other.transform;
            
             poleTouch = true ;
+            run = false;
         }
 
         if (other.gameObject.CompareTag("JumpStand"))
@@ -273,6 +281,7 @@ public class MousePlayerController : MonoBehaviour
         }
     }
 
+
     //離れたら戻す
     private void OnTriggerExit(Collider other)
     {
@@ -280,6 +289,7 @@ public class MousePlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Pole"))
         {
             poleTouch = false;
+            run = true;
         }
 
         if (other.gameObject.CompareTag("JumpStand"))
@@ -294,6 +304,7 @@ public class MousePlayerController : MonoBehaviour
         }
     }
 
+
     //壁に当たっている間、落ちる速度を落とす
     void UpwardForce()
     {
@@ -301,11 +312,13 @@ public class MousePlayerController : MonoBehaviour
         rbPlayer.drag = 2;
     }
 
+
     void DownwardForce()
     {
         //抵抗を戻す
         rbPlayer.drag = 0;
     }
+
 
     void OnCallChangeFace()
     {

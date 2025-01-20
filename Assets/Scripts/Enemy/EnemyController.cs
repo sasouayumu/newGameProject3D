@@ -9,6 +9,7 @@ public class EnemyController : MonoBehaviour
     private Transform playerTr;//Playerの座標
     private Transform enemyTr;//敵の座標
     private Transform trans;//回転用の座標
+
     //引き渡し用のPlayerの壁に当たった座標
     public Vector3 wallTouchPos;
     public Vector3 SetGetwallTouchPos { get { return wallTouchPos; } set { wallTouchPos = value; } }
@@ -16,15 +17,18 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float speed;//移動速度
     private float jump = 5f;//ジャンプの強さ
     private Rigidbody rbEnemy;//敵のRigidbody情報
+
     //当たり判定用
     private bool floor = false;
     private bool wall = false;
     private bool stepJamp = false;
+
     //Playerの壁キックの当たり判定
     public  bool CheckWallKick;
     public bool GetSetwallKick { get { return CheckWallKick; } set { CheckWallKick = value; } }
     private int jampStand = 1;
     
+
     void Start()
     {
         //Playerの位置とEnemyの位置を取得する
@@ -36,6 +40,7 @@ public class EnemyController : MonoBehaviour
         prevPos = trans.position;
         
     }
+
 
     void FixedUpdate()
     {
@@ -129,6 +134,7 @@ public class EnemyController : MonoBehaviour
         trans.rotation = rotation;
     }
 
+
     private void OnCollisionStay(Collision collision)
     { 
         //段差に当たったらジャンプできるようにする
@@ -148,6 +154,7 @@ public class EnemyController : MonoBehaviour
             stepJamp = true;
         }
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Wall"))
@@ -162,6 +169,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Wall"))
@@ -170,17 +178,13 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Step") || collision.gameObject.CompareTag("floor"))
         {
             floor = false;
         }
-
-        //if (collision.gameObject.CompareTag("Wall"))
-        //{
-        //    wall = false;
-        //}
 
         if (collision.gameObject.CompareTag("Step"))
         {
