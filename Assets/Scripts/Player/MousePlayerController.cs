@@ -79,7 +79,7 @@ public class MousePlayerController : MonoBehaviour
             audioSource.PlayOneShot(jampSE);
             animator.Play("Jump", 0, 0); //ジャンプのモーション
             //ジャンプ台に乗っているなら高くジャンプ
-            rbPlayer.velocity = Vector3.up * jumpForce*jumpStand;
+            rbPlayer.velocity = Vector3.up * jumpForce * jumpStand;
         }
 
         //壁に当たりながらAkeyとDkeyを交互に押すことで壁をのぼる
@@ -99,11 +99,11 @@ public class MousePlayerController : MonoBehaviour
 
         if (upWall)
         {
-            Debug.Log("up"+upWall);
-            Debug.Log(aKey);
-            Debug.Log(dKey);
+            //Debug.Log("up"+upWall);
+            //Debug.Log(aKey);
+            //Debug.Log(dKey);
             audioSource.PlayOneShot(upWallSE);
-            rbPlayer.velocity = Vector3.up*20;
+            rbPlayer.velocity = Vector3.up*4;
             upWall = false;   
         }
 
@@ -176,13 +176,12 @@ public class MousePlayerController : MonoBehaviour
         Vector3 moveFoward = cameraFoward;
 
         RaycastHit hit;
-        
-        if (Physics.Raycast(transform.position+(Vector3.up/4), transform.forward, out hit, 0.3f)|| Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, 0.3f))
+       
+        if (Physics.Raycast(transform.position+(Vector3.up/8), transform.forward, out hit, 0.3f)|| Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, 0.3f))
         {
             //hitしたTagがWallまたはStepならPlayerを走らないようにする
             if (hit.collider.gameObject.CompareTag("Wall") || hit.collider.gameObject.CompareTag("Step"))
             {
-                rbPlayer.velocity = new Vector3(rbPlayer.velocity.x, rbPlayer.velocity.y * 0.5f, rbPlayer.velocity.z);
                 run = false;
             }
             else
@@ -194,7 +193,7 @@ public class MousePlayerController : MonoBehaviour
         {
             run = true;
         }
-
+       
         if (run)
         {
             //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
@@ -245,9 +244,10 @@ public class MousePlayerController : MonoBehaviour
             aKey = true;
             dKey = true;
             upWall = false;
+            animator.Play("Idle");//着地したら走るモーションに戻す
+
             //Playerが地面にいる間はEnemyは壁にいる時の処理をしないようにする
             EnemyController.GetSetwallKick = false;
-            animator.Play("Idle");//着地したら走るモーションに戻す
         }
     }
 

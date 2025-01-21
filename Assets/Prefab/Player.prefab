@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 4553496661133592971}
   - component: {fileID: 8391097777548849877}
   - component: {fileID: 5635712958228048069}
-  - component: {fileID: 9195344264056207787}
+  - component: {fileID: 7326457772524630409}
   - component: {fileID: 1707686547637473133}
   - component: {fileID: 2170471028166766852}
   m_Layer: 0
@@ -205,8 +205,8 @@ CapsuleCollider:
   m_Height: 0.912984
   m_Direction: 1
   m_Center: {x: -0.04086651, y: 0.53847843, z: 0.0015370846}
---- !u!135 &9195344264056207787
-SphereCollider:
+--- !u!136 &7326457772524630409
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -223,9 +223,11 @@ SphereCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.09621306
-  m_Center: {x: 0, y: 0.585026, z: 0.19382833}
+  serializedVersion: 2
+  m_Radius: 0.13895448
+  m_Height: 0.5177499
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.5202535, z: 0.14977594}
 --- !u!114 &1707686547637473133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,17 +240,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2e325cf49280d44ab3f5c76d6cc87f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jampSE: {fileID: 8300000, guid: cc970b612ff15b348b760e14e95782d6, type: 3}
+  runSE: {fileID: 8300000, guid: b2e15b0e576b65e42b3d99f3773990c7, type: 3}
+  upWallSE: {fileID: 8300000, guid: 6d3e3985e6e28d44baa6c2eb8a849ce3, type: 3}
   upSpeed: 8
   usuallySpeed: 5
   jumpForce: 4.5
-  jump: 1
   poleTarget: {fileID: 0}
   spinSpeed: 10
   CameraController: {fileID: 0}
   dushGaugeSlider: {fileID: 0}
-  jampSE: {fileID: 8300000, guid: cc970b612ff15b348b760e14e95782d6, type: 3}
-  runSE: {fileID: 8300000, guid: b2e15b0e576b65e42b3d99f3773990c7, type: 3}
-  upWallSE: {fileID: 8300000, guid: 6d3e3985e6e28d44baa6c2eb8a849ce3, type: 3}
 --- !u!82 &2170471028166766852
 AudioSource:
   m_ObjectHideFlags: 0
