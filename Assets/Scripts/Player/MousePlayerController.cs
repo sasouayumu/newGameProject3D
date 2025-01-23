@@ -99,9 +99,6 @@ public class MousePlayerController : MonoBehaviour
 
         if (upWall)
         {
-            //Debug.Log("up"+upWall);
-            //Debug.Log(aKey);
-            //Debug.Log(dKey);
             audioSource.PlayOneShot(upWallSE);
             rbPlayer.velocity = Vector3.up*4;
             upWall = false;   
