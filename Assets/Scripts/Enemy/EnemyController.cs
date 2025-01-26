@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
+//敵の行動の処理をするクラス
 public class EnemyController : MonoBehaviour
 {
-    private GameObject player;
-    private Transform playerTr; //Playerの座標
-    private Transform enemyTr;  //敵の座標
-    private Transform trans;    //回転用の座標
-
-    //引き渡し用のPlayerの壁に当たった座標
-    public Vector3 wallTouchPos;
-    public Vector3 SetGetwallTouchPos { get { return wallTouchPos; } set { wallTouchPos = value; } }
-    private Vector3 prevPos;      //回転用のプライベート座標
     [SerializeField] float speed; //移動速度
+    private GameObject player;
+    private Transform playerTr; 　//Playerの座標
+    private Transform enemyTr;  　//敵の座標
+    private Transform trans;   　 //回転用の座標
+
+    private int jampStand = 1;　　//ジャンプ台のジャンプの倍率
+
+    private Vector3 prevPos;      //回転用のプライベート座標
+    
     private float jump = 5f;      //ジャンプの強さ
     private Rigidbody rbEnemy;    //敵のRigidbody情報
 
@@ -24,10 +26,13 @@ public class EnemyController : MonoBehaviour
     private bool stepJamp = false;
 
     //Playerの壁キックの当たり判定
-    public  bool CheckWallKick;
+    private  bool CheckWallKick;
     public bool GetSetwallKick { get { return CheckWallKick; } set { CheckWallKick = value; } }
-    private int jampStand = 1;
     
+    //引き渡し用のPlayerの壁に当たった座標
+    private Vector3 wallTouchPos;
+    public Vector3 GetSetwallTouchPos { get { return wallTouchPos; } set { wallTouchPos = value; } }
+
 
     void Start()
     {
@@ -38,7 +43,6 @@ public class EnemyController : MonoBehaviour
         player = GameObject.Find("Player");
         trans = transform;
         prevPos = trans.position;
-        
     }
 
 
@@ -46,9 +50,11 @@ public class EnemyController : MonoBehaviour
     {
         int upRotation = 0;       //通常時はY軸を０に固定する
         float wallRotation_x = 0; //壁に登るときの角度
+
         Debug.DrawRay(transform.position, (transform.forward + new Vector3(45, 0, 45)) * 0.25f);
         Debug.DrawRay(transform.position, (transform.forward + new Vector3(-45, 0, 45)) * 0.25f);
         Debug.DrawRay(transform.position, transform.forward, UnityEngine.Color.red);
+
         //Playerが高い場所に行き、FloorがTrueならジャンプする
         if ((Mathf.Floor(playerTr.transform.position.y) > Mathf.Floor(enemyTr.transform.position.y) && floor) || stepJamp)
         {
@@ -62,6 +68,8 @@ public class EnemyController : MonoBehaviour
             upRotation = 270;//壁を登るときは上を向くようにする
 
             RaycastHit hit;
+
+            //壁に垂直に向くための処理
             if (Physics.Raycast(transform.position, transform.forward, out hit, 1f)
                 || Physics.Raycast(transform.position, transform.forward + new Vector3(-45, 0, 45), out hit, 0.25f)
                 || Physics.Raycast(transform.position, transform.forward + new Vector3(45, 0, -45), out hit, 0.25f))
@@ -79,11 +87,11 @@ public class EnemyController : MonoBehaviour
                  new Vector3(playerTr.position.x, playerTr.position.y, playerTr.position.z),
                  speed * Time.deltaTime * 2);
         }
-        else if (GetSetwallKick && transform.position != SetGetwallTouchPos && !wall)
+        else if (GetSetwallKick && transform.position != GetSetwallTouchPos && !wall)
         {
             //Playerが壁キックしている間はPlayerが壁に当たった場所へ進むようにする
             transform.position =
-               Vector3.MoveTowards(transform.position, SetGetwallTouchPos, speed * Time.deltaTime);
+               Vector3.MoveTowards(transform.position, GetSetwallTouchPos, speed * Time.deltaTime);
         }
         else if (Mathf.Floor(playerTr.transform.position.y - enemyTr.transform.position.y) > 15f)
         {
@@ -150,17 +158,12 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Wall"))
         {
             wall = true;
-            if(Physics.Raycast(transform.position+Vector3.up,transform.forward,out RaycastHit hit, 10))
-            {
-                Quaternion rotation = Quaternion.LookRotation(-hit.normal);
-                rotation.x = 0; rotation.z = 0;
-                transform.rotation = rotation;
-            }
         }
     }
 
@@ -191,5 +194,4 @@ public class EnemyController : MonoBehaviour
             jampStand = 1;
         }
     }
-
 }

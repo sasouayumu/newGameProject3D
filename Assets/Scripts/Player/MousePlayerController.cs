@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 
+//プレイヤー関連のクラス
 public class MousePlayerController : MonoBehaviour
 {
     //Audio関係
@@ -28,7 +29,7 @@ public class MousePlayerController : MonoBehaviour
     private bool jump = true;
     private bool dush = true;
     private bool coroutine = true;
-    private bool wkey = false;
+    private bool wKey = false;
     private bool poleTouch = false;
     //壁の当たり判定
     private bool wallTouch;
@@ -78,12 +79,13 @@ public class MousePlayerController : MonoBehaviour
         {
             audioSource.PlayOneShot(jampSE);
             animator.Play("Jump", 0, 0); //ジャンプのモーション
+
             //ジャンプ台に乗っているなら高くジャンプ
             rbPlayer.velocity = Vector3.up * jumpForce * jumpStand;
         }
 
         //壁に当たりながらAkeyとDkeyを交互に押すことで壁をのぼる
-        if(Input.GetKeyDown(KeyCode.A)&&aKey&&wallTouch)
+        if(Input.GetKeyDown(KeyCode.A) && aKey && wallTouch)　
         {
             aKey = false;
             dKey = true;
@@ -116,14 +118,14 @@ public class MousePlayerController : MonoBehaviour
             //一度だけ敵に壁に当たった位置を送る
             if (!EnemyController.GetSetwallKick)
             {
-                EnemyController.wallTouchPos = transform.position;
+                EnemyController.GetSetwallTouchPos = transform.position;
             }
 
             EnemyController.GetSetwallKick = true;
         }
         else
         {
-            wkey = false;
+            wKey = false;
         }
 
         //ポールジャンプの処理
@@ -173,10 +175,20 @@ public class MousePlayerController : MonoBehaviour
         Vector3 moveFoward = cameraFoward;
 
         RaycastHit hit;
+        Vector3 runForwardR = transform.forward + new Vector3(0.7f, 0, 0);　//右方向のRayの角度
+        Vector3 runForwardL = transform.forward - new Vector3(0.7f, 0, 0);  //左方向のRayの角度
+
+        Debug.DrawRay(transform.position + Vector3.up, runForwardR);
+        Debug.DrawRay(transform.position + Vector3.up, runForwardL);
        
-        if (Physics.Raycast(transform.position+(Vector3.up/8), transform.forward, out hit, 0.3f)|| Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, 0.3f))
+        if (Physics.Raycast(transform.position + (Vector3.up / 8), transform.forward, out hit, 0.3f)
+            || Physics.Raycast(transform.position + (Vector3.up / 8), runForwardR, out hit, 0.3f)
+            || Physics.Raycast(transform.position + (Vector3.up / 8), runForwardL, out hit, 0.3f)
+            || Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, 0.3f)
+            || Physics.Raycast(transform.position + Vector3.up, runForwardR, out hit, 0.3f)
+            || Physics.Raycast(transform.position + Vector3.up, runForwardL, out hit, 0.3f))
         {
-            //hitしたTagがWallまたはStepならPlayerを走らないようにする
+            //hitしたTagがWallまたはStepならPlayerに移動させないようにする
             if (hit.collider.gameObject.CompareTag("Wall") || hit.collider.gameObject.CompareTag("Step"))
             {
                 run = false;
@@ -190,14 +202,16 @@ public class MousePlayerController : MonoBehaviour
         {
             run = true;
         }
-       
+
+        Debug.Log(run);
+
         if (run)
         {
             //移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
             rbPlayer.velocity = moveFoward * moveSpeed + new Vector3(0, rbPlayer.velocity.y, 0);
         }
         
-        //キャラクターの向きを進行方向に
+        //キャラクターの向きを進行方向にする
         if (moveFoward != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(moveFoward * Time.deltaTime);
@@ -205,9 +219,10 @@ public class MousePlayerController : MonoBehaviour
     }
     
 
-    //走るのをやめたら一定時間走れないようにする
+    //ダッシュ中のゲージを減らす処理
     private IEnumerator DushCotroller()
     {
+        //ダッシュ中は一秒ずつゲージを減らす
         yield return new WaitForSeconds(1.0f);
         dushGaugeSlider.value -= 1f;
         yield return new WaitForSeconds(1.0f);
@@ -218,11 +233,13 @@ public class MousePlayerController : MonoBehaviour
     }
 
 
+    //ダッシュ終了した後のゲージ回復の処理
     private IEnumerator DushStop()
     {
         audioSource.Stop();
-        int gauge = 3-(int)dushGaugeSlider.value;
+        int gauge = 3-(int)dushGaugeSlider.value;　//減った分のゲージを計算
 
+        //減った分少しずつ回復させる
         for (int i = gauge; i >= 0; i--)
         {
             yield return new WaitForSeconds(1.0f);
@@ -237,10 +254,14 @@ public class MousePlayerController : MonoBehaviour
         //二段ジャンプできないようにする（着地でジャンプできるようにする）
         if (collision.gameObject.CompareTag("floor"))
         {
+            //ジャンプをできるようにする
             jump = true;
+
+            //壁登りする時の判定を戻す
             aKey = true;
             dKey = true;
             upWall = false;
+
             animator.Play("Idle");//着地したら走るモーションに戻す
 
             //Playerが地面にいる間はEnemyは壁にいる時の処理をしないようにする
@@ -251,6 +272,7 @@ public class MousePlayerController : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
+        //離れたらジャンプをできないようにする
         if (collision.gameObject.CompareTag("floor"))
         {
             jump = false;
@@ -269,15 +291,16 @@ public class MousePlayerController : MonoBehaviour
             run = false;
         }
 
+        //ジャンプ台に当たった時の処理
         if (other.gameObject.CompareTag("JumpStand"))
         {
             jumpStand = 2.5f;
         }
 
+        //壁に当たった時の処理
         if (other.gameObject.CompareTag("Wall"))
         {
             wallTouch = true;
-            UpwardForce();
         }
     }
 
@@ -285,7 +308,6 @@ public class MousePlayerController : MonoBehaviour
     //離れたら戻す
     private void OnTriggerExit(Collider other)
     {
-        //離れたら戻す
         if (other.gameObject.CompareTag("Pole"))
         {
             poleTouch = false;
@@ -299,24 +321,8 @@ public class MousePlayerController : MonoBehaviour
 
         if (other.gameObject.CompareTag("Wall"))
         {
-            DownwardForce();
             wallTouch = false;
         }
-    }
-
-
-    //壁に当たっている間、落ちる速度を落とす
-    void UpwardForce()
-    {
-        //抵抗を増やす
-        rbPlayer.drag = 2;
-    }
-
-
-    void DownwardForce()
-    {
-        //抵抗を戻す
-        rbPlayer.drag = 0;
     }
 
 

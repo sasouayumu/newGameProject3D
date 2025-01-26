@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+
+//ボタン関係の処理のクラス
 public class ButtonController : MonoBehaviour
 {
     //各ボタンの処理

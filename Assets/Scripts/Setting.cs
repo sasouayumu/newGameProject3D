@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
+
+//設定関連のクラス
 [RequireComponent(typeof(Slider))]
 public class Setting : MonoBehaviour
 {
@@ -24,7 +26,7 @@ public class Setting : MonoBehaviour
     }
 
 
-    //BGMとSEの音量調整バーの処理
+    //BGMの音量調整バーのメソッド
     public void SetAudioMixerBGM(float value)
     {
         value /= 5;
@@ -38,6 +40,7 @@ public class Setting : MonoBehaviour
     }
 
 
+    //SEの音量調節バーのメソッド
     public void SetAudioMixerSE(float value)
     {
         value /= 5;

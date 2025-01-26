@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+//クリア時のクラス
 public class GameClear : MonoBehaviour
 {
     private static bool key = false;
@@ -18,6 +20,7 @@ public class GameClear : MonoBehaviour
     }
 
 
+    //ゴールや鍵に当たった時のメソッド
     private void OnCollisionEnter(Collision collision)
     {
         //鍵を持ってゴールに行ったらゲームクリアシーンに進む
@@ -40,6 +43,8 @@ public class GameClear : MonoBehaviour
     }
 
 
+
+    //ゴールに付いた時のコルーチン
     IEnumerator Goal()
     {
         //SEを鳴らしてからシーン移動させる
@@ -59,6 +64,7 @@ public class GameClear : MonoBehaviour
     }
 
 
+    //次のステージ移動するメソッド
     public void Next()
     {
         //次のステージへ移動する最終ステージならタイトルへ戻る

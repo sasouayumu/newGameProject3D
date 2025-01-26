@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+//ゲームオーバー時に使うクラス
 public class GameOver : MonoBehaviour
 {
     public static string sceneName;
@@ -16,6 +18,7 @@ public class GameOver : MonoBehaviour
     }
 
 
+    //ゲームオーバーシーンに移動するメソッド
     private void OnCollisionEnter(Collision collision)
     {
         //プレイヤーに当たったらゲームオーバーシーンに移動する
@@ -36,6 +39,7 @@ public class GameOver : MonoBehaviour
     }
 
 
+    //ゲームオーバー時に呼び出されるコルーチン
     IEnumerator GameOverSE()
     {
         //SEを鳴らしてからゲームオーバーシーンへ

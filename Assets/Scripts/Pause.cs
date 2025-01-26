@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//ポーズを出すクラス
 public class Pause : MonoBehaviour
 {
     [SerializeField]
@@ -29,7 +31,6 @@ public class Pause : MonoBehaviour
     {
         //ポーズ画面を出し、時間を止める
         pauseUI.SetActive(!pauseUI.activeSelf);
-
         if (pauseUI.activeSelf)
         {
             Time.timeScale = 0f;

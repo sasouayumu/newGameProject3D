@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
+//チュートリアルを表示するクラス
 public class Tutorial : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI tutorialText;
@@ -26,6 +28,7 @@ public class Tutorial : MonoBehaviour
     }
 
 
+    //チュートリアルパネルを消すボタン
     public void ExitTutorialButton()
     {
         //ボタンを押したら戻す
