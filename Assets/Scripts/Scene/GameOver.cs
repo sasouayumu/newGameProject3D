@@ -7,9 +7,9 @@ using UnityEngine.SceneManagement;
 //ゲームオーバー時に使うクラス
 public class GameOver : MonoBehaviour
 {
-    public static string sceneName;
-    public AudioClip gameOverSE;
+    [SerializeField]private AudioClip gameOverSE;
     private AudioSource audioSource;
+    private static string sceneName;
 
 
     void Start()

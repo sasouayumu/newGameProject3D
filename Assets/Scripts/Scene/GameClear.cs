@@ -7,10 +7,10 @@ using UnityEngine.SceneManagement;
 //クリア時のクラス
 public class GameClear : MonoBehaviour
 {
-    private static bool key = false;
-    [SerializeField] private GameObject getKeyUI;
-    [SerializeField] public AudioClip getKeySE;
-    [SerializeField] public AudioClip goalSE;
+    [SerializeField] private GameObject getKeyUI;  //鍵取得状況を表示するUI
+    [SerializeField] private AudioClip getKeySE;　 //鍵取得時のSE
+    [SerializeField] private AudioClip goalSE;     //ゴール時のSE
+    private static bool key = false;　　　　　　　 //鍵の取得状況の管理
     private  AudioSource audioSource;
     static int sceneNumber;
 
@@ -23,23 +23,25 @@ public class GameClear : MonoBehaviour
     //ゴールや鍵に当たった時のメソッド
     private void OnCollisionEnter(Collision collision)
     {
-        //鍵を持ってゴールに行ったらゲームクリアシーンに進む
+        //鍵が取得状態でゴールに行ったらゲームクリアシーンに進む
         if (collision.gameObject.CompareTag("Player") && key && this.gameObject.CompareTag("Goal"))
         {
             audioSource.PlayOneShot(goalSE);
             key = false;
-            sceneNumber = SceneManager.GetActiveScene().buildIndex;
+            sceneNumber = SceneManager.GetActiveScene().buildIndex;　//現在のシーン番号を取得
             StartCoroutine("Goal");
         }
 
-        //鍵に当たったらkeyをTrueにして、鍵を消す
+        //鍵に当たったら鍵を取得状態にして、鍵のオブジェクトを消す
         if (collision.gameObject.CompareTag("Player") && this.gameObject.CompareTag("Key"))
         {
             key = true;
             AudioSource.PlayClipAtPoint(getKeySE,transform.position);
-            getKeyUI.SetActive(true);
+            getKeyUI.SetActive(true);　//左下に鍵を表示する
             Destroy(this.gameObject);
         }
+
+        Debug.Log(key);
     }
 
 

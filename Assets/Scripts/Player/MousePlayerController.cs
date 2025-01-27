@@ -19,38 +19,44 @@ public class MousePlayerController : MonoBehaviour
     [SerializeField] private AudioClip upWallSE;
     private AudioSource audioSource;
 
-    [SerializeField]private float upSpeed = 8f;
-    [SerializeField] private float usuallySpeed = 5f;
+    [SerializeField] private CameraController CameraController;
+
+    //ポールジャンプ用
+    [SerializeField] private Transform poleTarget;
+    [SerializeField] private float spinSpeed = 4f;
+
+    //ダッシュゲージのスライダー
+    [SerializeField] private Slider dushGaugeSlider;
+
+    [SerializeField]private float upSpeed = 8f;　　　 //ダッシュ時のスピード
+    [SerializeField] private float usuallySpeed = 5f; //通常時のスピード
+    [SerializeField] private float jumpForce = 4.5f;  //ジャンプ力
     private float inputV;
-    private float moveSpeed;                        //移動速度
-    [SerializeField]private float jumpForce = 4.5f; //ジャンプ力
-    private float jumpStand = 1f;                   //ジャンプ台の倍率
+    private float moveSpeed;                        　//移動速度
+    private float jumpStand = 1f;                   　//ジャンプ台の倍率
+
     //ジャンプや走る処理の判定
     private bool jump = true;
     private bool dush = true;
     private bool coroutine = true;
     private bool wKey = false;
     private bool poleTouch = false;
-    //壁の当たり判定
-    private bool wallTouch;
-    public bool wallTouchgs { get { return wallTouch; } set { wallTouch = false; } }
+   
     //AkeyとDkeyで壁をのぼるための判定
     private bool aKey = true;
     private bool dKey = true;
     private bool upWall = false;
     private bool run = true;
-    //ポールジャンプ用
-    [SerializeField] private Transform poleTarget;
-    [SerializeField] private float spinSpeed =4f;
+
     //PlayerのRigidbody
     private Rigidbody rbPlayer;
     private Animator animator;
     private EnemyController EnemyController;
-    [SerializeField] private CameraController CameraController;
-    //ダッシュゲージのスライダー
-    [SerializeField] private Slider dushGaugeSlider;
-   
-    
+
+    //壁の当たり判定
+    private bool wallTouch;
+
+
     void Start()
     {
         moveSpeed = usuallySpeed;
@@ -181,6 +187,7 @@ public class MousePlayerController : MonoBehaviour
         Debug.DrawRay(transform.position + Vector3.up, runForwardR);
         Debug.DrawRay(transform.position + Vector3.up, runForwardL);
        
+        //Rayを照射
         if (Physics.Raycast(transform.position + (Vector3.up / 8), transform.forward, out hit, 0.3f)
             || Physics.Raycast(transform.position + (Vector3.up / 8), runForwardR, out hit, 0.3f)
             || Physics.Raycast(transform.position + (Vector3.up / 8), runForwardL, out hit, 0.3f)
@@ -203,7 +210,7 @@ public class MousePlayerController : MonoBehaviour
             run = true;
         }
 
-        Debug.Log(run);
+        //Debug.Log(run);
 
         if (run)
         {
@@ -326,8 +333,6 @@ public class MousePlayerController : MonoBehaviour
     }
 
 
-    void OnCallChangeFace()
-    {
-
-    }
+    //アニメーションイベント用
+    private void OnCallChangeFace(){}
 }

@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-//プレイヤーに追従するカメラの処理するクラス
+//プレイヤーに追従するカメラの管理するクラス
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private GameObject SecondCamera; //プレイヤーの後ろを見るためのカメラ

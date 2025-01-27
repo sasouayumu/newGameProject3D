@@ -8,7 +8,6 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] float speed; //移動速度
-    private GameObject player;
     private Transform playerTr; 　//Playerの座標
     private Transform enemyTr;  　//敵の座標
     private Transform trans;   　 //回転用の座標
@@ -26,8 +25,8 @@ public class EnemyController : MonoBehaviour
     private bool stepJamp = false;
 
     //Playerの壁キックの当たり判定
-    private  bool CheckWallKick;
-    public bool GetSetwallKick { get { return CheckWallKick; } set { CheckWallKick = value; } }
+    private  bool checkWallKick;
+    public bool GetSetwallKick { get { return checkWallKick; } set { checkWallKick = value; } }
     
     //引き渡し用のPlayerの壁に当たった座標
     private Vector3 wallTouchPos;
@@ -40,7 +39,6 @@ public class EnemyController : MonoBehaviour
         playerTr = GameObject.FindGameObjectWithTag("Player").transform;
         enemyTr = GameObject.FindGameObjectWithTag("Enemy").transform;
         rbEnemy = GetComponent<Rigidbody>();
-        player = GameObject.Find("Player");
         trans = transform;
         prevPos = trans.position;
     }

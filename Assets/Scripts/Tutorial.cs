@@ -21,6 +21,7 @@ public class Tutorial : MonoBehaviour
     }
 
 
+    //チュートリアルやポーズのパネルを表示しないようにする
     void Start()
     {
         tutorialUI.SetActive(false);
@@ -39,7 +40,7 @@ public class Tutorial : MonoBehaviour
 
     void Update()
     {
-        //タイムスケールがゼロならチュートリアルパネルをTrueにする
+        //タイムスケールがゼロならチュートリアルパネルを表示する
         if (Mathf.Approximately(Time.timeScale, 0f)&& !pauseUI.activeSelf)
         {
             tutorialUI.SetActive(true);

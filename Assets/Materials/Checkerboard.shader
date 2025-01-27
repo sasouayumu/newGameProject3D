@@ -1,4 +1,5 @@
 // Renders a two colored checkerboard pattern using the existing UV coordinates. 
+//オブジェクトをチェック柄にするシェーダ
 Shader "Game/Unlit/Checkerboard" {
 	Properties {
 		_Color0("Color 0", Color) = (1.0, 1.0, 1.0, 1.0)
