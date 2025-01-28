@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7608502132874152749}
   - component: {fileID: 4939378018015284029}
   m_Layer: 0
-  m_Name: key
+  m_Name: Key
   m_TagString: Key
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6f4d44b8023025448581a61ae867fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  getKeyUI: {fileID: 0}
+  getKeyUI: {fileID: 1070205578516236375, guid: 4896f0d01daa351448296c0f610230b9, type: 3}
   getKeySE: {fileID: 8300000, guid: 0ba927256fa48a54a8f26eb015cdae57, type: 3}
   goalSE: {fileID: 8300000, guid: 337de20426d7b3d49af3472ed29bfc36, type: 3}
 --- !u!136 &4939378018015284029
