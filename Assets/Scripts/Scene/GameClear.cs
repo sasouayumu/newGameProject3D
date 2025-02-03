@@ -45,7 +45,6 @@ public class GameClear : MonoBehaviour
     }
 
 
-
     //ゴールに付いた時のコルーチン
     IEnumerator Goal()
     {
@@ -70,7 +69,7 @@ public class GameClear : MonoBehaviour
     public void Next()
     {
         //次のステージへ移動する最終ステージならタイトルへ戻る
-        if(sceneNumber == 8)
+        if(sceneNumber == 10)
         {
             SceneManager.LoadScene("TitleScene");
         }

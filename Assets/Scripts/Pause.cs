@@ -10,7 +10,6 @@ public class Pause : MonoBehaviour
     private GameObject pauseUI;
    
 
-    // Update is called once per frame
     void Update()
     {
         //タイムスケールがゼロの場合は処理をしない

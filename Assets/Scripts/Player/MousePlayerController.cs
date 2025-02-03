@@ -19,7 +19,7 @@ public class MousePlayerController : MonoBehaviour
     [SerializeField] private AudioClip upWallSE;
     private AudioSource audioSource;
 
-    [SerializeField] private CameraController CameraController;
+    [SerializeField] private CameraController cameraController;
 
     //ポールジャンプ用
     [SerializeField] private Transform poleTarget;
@@ -51,7 +51,7 @@ public class MousePlayerController : MonoBehaviour
     //PlayerのRigidbody
     private Rigidbody rbPlayer;
     private Animator animator;
-    private EnemyController EnemyController;
+    private EnemyController enemyController;
 
     //壁の当たり判定
     private bool wallTouch;
@@ -63,13 +63,12 @@ public class MousePlayerController : MonoBehaviour
         rbPlayer = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         GameObject enemyObj = GameObject.Find("Enemy");
-        EnemyController = enemyObj.GetComponent<EnemyController>();
+        enemyController = enemyObj.GetComponent<EnemyController>();
         dushGaugeSlider.value = 3f;
         audioSource = GetComponent<AudioSource>();
     }
 
 
-    // Update is called once per frame
     void Update()
     {
         //タイムスケールがゼロの場合は処理をしない
@@ -105,6 +104,7 @@ public class MousePlayerController : MonoBehaviour
             upWall = true;
         }
 
+        //壁をのぼる
         if (upWall)
         {
             audioSource.PlayOneShot(upWallSE);
@@ -117,17 +117,17 @@ public class MousePlayerController : MonoBehaviour
         {
             run = true;
             audioSource.PlayOneShot(jampSE);
-            animator.Play("Jump", 0, 0); //ジャンプのモーション
-            rbPlayer.velocity = Vector3.up * 8;
-            CameraController.InversionCamera();
+            animator.Play("Jump", 0, 0); 　　　 //ジャンプのモーション
+            rbPlayer.velocity = Vector3.up * 8; //反対側にジャンプする
+            cameraController.InversionCamera(); //カメラを反転する
 
             //一度だけ敵に壁に当たった位置を送る
-            if (!EnemyController.GetSetwallKick)
+            if (!enemyController.GetSetwallKick)
             {
-                EnemyController.GetSetwallTouchPos = transform.position;
+                enemyController.GetSetwallTouchPos = transform.position;
             }
 
-            EnemyController.GetSetwallKick = true;
+            enemyController.GetSetwallKick = true;
         }
         else
         {
@@ -183,9 +183,6 @@ public class MousePlayerController : MonoBehaviour
         RaycastHit hit;
         Vector3 runForwardR = transform.forward + new Vector3(0.7f, 0, 0);　//右方向のRayの角度
         Vector3 runForwardL = transform.forward - new Vector3(0.7f, 0, 0);  //左方向のRayの角度
-
-        Debug.DrawRay(transform.position + Vector3.up, runForwardR);
-        Debug.DrawRay(transform.position + Vector3.up, runForwardL);
        
         //Rayを照射
         if (Physics.Raycast(transform.position + (Vector3.up / 8), transform.forward, out hit, 0.3f)
@@ -209,8 +206,6 @@ public class MousePlayerController : MonoBehaviour
         {
             run = true;
         }
-
-        //Debug.Log(run);
 
         if (run)
         {
@@ -236,7 +231,8 @@ public class MousePlayerController : MonoBehaviour
         dushGaugeSlider.value -= 1f;
         yield return new WaitForSeconds(1.0f);
         dushGaugeSlider.value -= 1f;
-        dush = false;
+
+        dush = false; //ダッシュできないようにする
     }
 
 
@@ -264,15 +260,10 @@ public class MousePlayerController : MonoBehaviour
             //ジャンプをできるようにする
             jump = true;
 
-            //壁登りする時の判定を戻す
-            aKey = true;
-            dKey = true;
-            upWall = false;
-
             animator.Play("Idle");//着地したら走るモーションに戻す
 
             //Playerが地面にいる間はEnemyは壁にいる時の処理をしないようにする
-            EnemyController.GetSetwallKick = false;
+            enemyController.GetSetwallKick = false;
         }
     }
 
@@ -328,6 +319,11 @@ public class MousePlayerController : MonoBehaviour
 
         if (other.gameObject.CompareTag("Wall"))
         {
+            //壁登りする時の判定を戻す
+            aKey = true;
+            dKey = true;
+            upWall = false;
+
             wallTouch = false;
         }
     }

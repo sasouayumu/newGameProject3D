@@ -85,7 +85,7 @@ public class Tutorial : MonoBehaviour
 
             if (this.gameObject.CompareTag("TutorialPole"))
             {
-                tutorialText.text = "<color=yellow>黄色のポール</color>で<color=red>Sキー</color>で\r\nポールを使ってジャンプ。";
+                tutorialText.text = "<color=yellow>黄色のポール</color>で<color=red>Space</color>で\r\nポールを使ってジャンプ。";
             }
 
             if (this.gameObject.CompareTag("TutorialWallUp"))
