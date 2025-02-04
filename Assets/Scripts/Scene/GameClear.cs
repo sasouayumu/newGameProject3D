@@ -36,12 +36,10 @@ public class GameClear : MonoBehaviour
         if (collision.gameObject.CompareTag("Player") && this.gameObject.CompareTag("Key"))
         {
             key = true;
-            AudioSource.PlayClipAtPoint(getKeySE,transform.position);
+            AudioSource.PlayClipAtPoint(getKeySE, transform.position);
             getKeyUI.SetActive(true);Å@//ç∂â∫Ç…åÆÇï\é¶Ç∑ÇÈ
             Destroy(this.gameObject);
         }
-
-        Debug.Log(key);
     }
 
 

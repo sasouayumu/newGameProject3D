@@ -1334,6 +1334,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6940171056514988265, guid: 90e3d2c444e58b346b8b5539536d094c, type: 3}
+      propertyPath: m_MinValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6940171056514988265, guid: 90e3d2c444e58b346b8b5539536d094c, type: 3}
       propertyPath: m_Direction
       value: 1
       objectReference: {fileID: 0}

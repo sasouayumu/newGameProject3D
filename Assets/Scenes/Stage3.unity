@@ -551,6 +551,10 @@ PrefabInstance:
       propertyPath: SecondCamera
       value: 
       objectReference: {fileID: 542400301}
+    - target: {fileID: 3082941731570831757, guid: d3ffb076caf1937439c121fe9e4f7e71, type: 3}
+      propertyPath: secondCamera
+      value: 
+      objectReference: {fileID: 542400301}
     - target: {fileID: 5973534239330555521, guid: d3ffb076caf1937439c121fe9e4f7e71, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2369,7 +2373,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8596481159260596433, guid: 05961b004c067754c8d2f61d253087e5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.799999
+      value: -7.58
       objectReference: {fileID: 0}
     - target: {fileID: 8596481159260596433, guid: 05961b004c067754c8d2f61d253087e5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4338,6 +4342,10 @@ PrefabInstance:
       objectReference: {fileID: 708298382}
     - target: {fileID: 1707686547637473133, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
       propertyPath: CameraController
+      value: 
+      objectReference: {fileID: 164456653}
+    - target: {fileID: 1707686547637473133, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
+      propertyPath: cameraController
       value: 
       objectReference: {fileID: 164456653}
     - target: {fileID: 3956690141628478147, guid: ef2495704cd8dab4185ec96da51f5b48, type: 3}
